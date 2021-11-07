@@ -60,7 +60,7 @@
 			"pxOffsetY": 0,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": "Walls", "color": "#000000" }],
+			"intGridValues": [ { "value": 1, "identifier": "Walls", "color": "#000000" }, { "value": 2, "identifier": "Ground", "color": "#FF0000" } ],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,

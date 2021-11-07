@@ -17,7 +17,9 @@ ScriptedImporter:
   _useCompositeCollider: 1
   _intGridValues:
   - _key: IntGrid_1
-    _asset: {instanceID: 0}
+    _asset: {fileID: 11400000, guid: 955c7d74fe8f1f147bc8382c9f5ba8b5, type: 2}
+  - _key: IntGrid_2
+    _asset: {fileID: 11400000, guid: 955c7d74fe8f1f147bc8382c9f5ba8b5, type: 2}
   _entities:
   - _key: Door
     _asset: {instanceID: 0}
