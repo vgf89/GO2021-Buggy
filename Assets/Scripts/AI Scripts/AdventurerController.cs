@@ -2,20 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Tilemaps;
 
 public class AdventurerController : MonoBehaviour
 {
-    private NavMeshAgent adventurerNavMeshAgent;
+    
 
     [SerializeField] 
     private Camera mainCamera;
+    [SerializeField]
+    private NavMeshAgent adventurerNavMeshAgent;
+    [SerializeField]
+    private Tilemap map;
 
     private Vector3 adventurerDestination;
 
     // Start is called before the first frame update
     void Start()
     {
-        adventurerNavMeshAgent = GetComponent<NavMeshAgent>();
+        //If NavMeshAgent has no reference from the inspector
+        if (adventurerDestination == null)
+            adventurerNavMeshAgent = GetComponent<NavMeshAgent>();
 
         //Prevents Agent from rotating away from the Camera
         adventurerNavMeshAgent.updateRotation = false;
@@ -30,6 +37,7 @@ public class AdventurerController : MonoBehaviour
     void Update()
     {
         MouseHandling();
+        
     }
 
 
@@ -42,8 +50,9 @@ public class AdventurerController : MonoBehaviour
         {
             mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPos.z = 0f;
-            adventurerDestination = mouseWorldPos;
-            Debug.Log("Setting " + transform.name + "'s destination to: " + mouseWorldPos.ToString());
+            Vector3Int mouseGridPos = map.WorldToCell(mouseWorldPos);
+            adventurerDestination = mouseGridPos;
+            Debug.Log("Setting " + transform.name + "'s destination to: " + mouseGridPos.ToString());
             adventurerNavMeshAgent.SetDestination(adventurerDestination);
         }
     }
