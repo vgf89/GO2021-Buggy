@@ -24,10 +24,10 @@ public class GameTiles : MonoBehaviour
             Destroy(gameObject);
         }*/
 
-        Debug.Log(tilemap.cellBounds.xMin);
-        GetGridTilesInArray();
-        //GetGridTilesInDictionary();
-        //SetGridTileNeighbors();
+        //Debug.Log(tilemap.cellBounds.xMin);
+        //GetGridTilesInArray();
+        GetGridTilesInDictionary();
+        SetGridTileNeighbors();
     }
 
     //Adds all tiles from the Ground Tilemap and stores it into a 2D array. The 
@@ -69,7 +69,7 @@ public class GameTiles : MonoBehaviour
             tile.worldPosition = tilemap.CellToWorld(localPos);
             tile.tilemapMember = tilemap;
             tile.isExplored = false;
-            
+            tile.tileNeighbors = new Dictionary<Vector3, GroundTileData>();
 
             //Adds the tile with the key being the tile's position in the world
             tiles.Add(tile.worldPosition, tile);
@@ -80,21 +80,30 @@ public class GameTiles : MonoBehaviour
     private void SetGridTileNeighbors()
     {
         var groundTileData = ScriptableObject.CreateInstance<GroundTileData>();
+        Vector3 checkingPosition = new Vector3();
 
         foreach (KeyValuePair<Vector3, GroundTileData> groundTile in tiles)
+        {
             for (int x = -1; x <= 1; x++)
+            {
+
                 for (int y = -1; y <= 1; y++)
                 {
-                    Vector3 checkingPosition = groundTile.Value.worldPosition + new Vector3(x, y, 0);
-                    Debug.Log("Checking position " + checkingPosition.ToString());
+                    checkingPosition = groundTile.Value.worldPosition + new Vector3(x, y, 0);
                     //If the value is itself, DO NOT ADD AS NEIGHBOR
                     if (groundTile.Value.worldPosition == checkingPosition)
-                        continue;
-                    else if (tiles.TryGetValue(groundTile.Value.worldPosition + new Vector3(x, y, 0), out groundTileData))
+                    {
+                        //continue;
+                    }
+                    else if (tiles.TryGetValue(checkingPosition, out groundTileData))
                     {
                         groundTile.Value.tileNeighbors.Add(checkingPosition, tiles[checkingPosition]);
+                        //Debug.Log("Tile " + groundTile.Value.worldPosition.ToString() + " found a neighbor at " + groundTile.Value.tileNeighbors[checkingPosition].worldPosition.ToString());
                     }
                 }
+            }
+            Debug.Log("Tile " + groundTile.Value.worldPosition.ToString() + " has " + groundTile.Value.tileNeighbors.Count + " neighbors.");
+        }
     }
 
     // Update is called once per frame
