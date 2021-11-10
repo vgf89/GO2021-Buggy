@@ -17,6 +17,8 @@ public class AdventurerController : MonoBehaviour
 
     private Vector3 adventurerDestination;
 
+    public bool isDebugging;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,7 @@ public class AdventurerController : MonoBehaviour
         adventurerNavMeshAgent.updateRotation = false;
         adventurerNavMeshAgent.updateUpAxis = false;
 
-        if (adventurerNavMeshAgent != null)
+        if (adventurerNavMeshAgent != null == isDebugging)
             Debug.Log("Successfully set NaveMeshAgent from: " + transform.name);
 
     }
@@ -52,7 +54,8 @@ public class AdventurerController : MonoBehaviour
             mouseWorldPos.z = 0f;
             Vector3Int mouseGridPos = map.WorldToCell(mouseWorldPos);
             adventurerDestination = mouseGridPos;
-            Debug.Log("Setting " + transform.name + "'s destination to: " + mouseGridPos.ToString());
+            if(isDebugging)
+                Debug.Log("Setting " + transform.name + "'s destination to: " + mouseGridPos.ToString());
             adventurerNavMeshAgent.SetDestination(adventurerDestination);
         }
     }
