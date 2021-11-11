@@ -48,6 +48,7 @@ public class GameTiles : MonoBehaviour
             tileData.worldPosition = tilemap.CellToWorld(localPos);
             tileData.tilemapMember = tilemap;
             tileData.isExplored = false;
+            tileData.tileValue = 0;
 
             tilesArray[pos.x, pos.y] = tileData;
         }
@@ -70,6 +71,8 @@ public class GameTiles : MonoBehaviour
             tile.tilemapMember = tilemap;
             tile.isExplored = false;
             tile.tileNeighbors = new Dictionary<Vector3, GroundTileData>();
+            tile.tileValue = 0;
+            
 
             //Adds the tile with the key being the tile's position in the world
             tiles.Add(tile.worldPosition, tile);
@@ -101,10 +104,12 @@ public class GameTiles : MonoBehaviour
                         //Debug.Log("Tile " + groundTile.Value.worldPosition.ToString() + " found a neighbor at " + groundTile.Value.tileNeighbors[checkingPosition].worldPosition.ToString());
                     }
                 }
+                ;
             }
             Debug.Log("Tile " + groundTile.Value.worldPosition.ToString() + " has " + groundTile.Value.tileNeighbors.Count + " neighbors.");
         }
     }
+
 
     // Update is called once per frame
     void Update()

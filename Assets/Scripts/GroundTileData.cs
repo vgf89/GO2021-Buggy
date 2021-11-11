@@ -21,4 +21,22 @@ public class GroundTileData : ScriptableObject
 
     public Dictionary<Vector3, GroundTileData> tileNeighbors;
 
+    public int tileValue { get; set; }
+
+    /*
+    public void GetTileValue()
+    {
+        int tempCounter = 0;
+        
+
+        foreach (KeyValuePair<Vector3, GroundTileData> groundTileData in tileNeighbors)
+        {
+            if (groundTileData.Value.isExplored)
+                tempCounter++;
+        }
+
+        tileValue = tempCounter;
+    }
+    */
+
 }

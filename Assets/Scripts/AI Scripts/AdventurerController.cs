@@ -10,10 +10,17 @@ public class AdventurerController : MonoBehaviour
 
     [SerializeField] 
     private Camera mainCamera;
+
     [SerializeField]
     private NavMeshAgent adventurerNavMeshAgent;
+
     [SerializeField]
     private Tilemap map;
+
+    [SerializeField]
+    [Tooltip("Vision radius based on the tile the Adventurer is located.")]
+    [MinAttribute(0)]
+    private int visionRadius;
 
     private Vector3 adventurerDestination;
 
@@ -62,14 +69,28 @@ public class AdventurerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        Vector3Int intCurrentPos = map.WorldToCell(transform.position);
+
         if (adventurerNavMeshAgent.hasPath)
         {
             //Draws a blue wire cube at the Adventurer's destination
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(adventurerDestination, new Vector3(1, 1, 0));
         }
-        else
-            Gizmos.color = Color.clear;
+        
+        //Displays vision radius USE THIS ALGORITHM FOR SETTING GROUNDDATATILES TO isExplored
+        for (int x = -visionRadius; x <= visionRadius; x++)
+        {
+            for (int y = -visionRadius; y <= visionRadius; y++)
+            {
+                int absValue = Mathf.Abs(x) + Mathf.Abs(y);
+                if (absValue <= visionRadius)
+                    {
+                        Gizmos.color = Color.green;
+                        Gizmos.DrawWireCube(intCurrentPos + new Vector3Int(x,y,0), new Vector3(1,1,0));
+                    }
+            }
+        }
     }
 
 }
