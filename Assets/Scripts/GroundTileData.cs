@@ -5,8 +5,10 @@ using UnityEngine.Tilemaps;
 
 public class GroundTileData : ScriptableObject
 {
+    //Position to the grid
     public Vector3Int localPosition { get; set; }
 
+    //Position in the world
     public Vector3 worldPosition { get; set; }
 
     public TileBase tileBase { get; set; }
@@ -19,6 +21,7 @@ public class GroundTileData : ScriptableObject
 
     public bool isExplored { get; set; }
 
+    //Neighboring Tiles
     public Dictionary<Vector3, GroundTileData> tileNeighbors;
 
     public int tileValue { get; set; }
@@ -39,4 +42,15 @@ public class GroundTileData : ScriptableObject
     }
     */
 
+    public string printData()
+    {
+        string print = string.Format("TileData: " +
+            "\nlocalPosition {0}" +
+            "\nworldPosition {1}" +
+            "\nisExplored [{2}]" +
+            "\nhas [{3}] neighbors" +
+            "\ntileValue = {4}", 
+            localPosition, worldPosition, isExplored, tileNeighbors.Count, tileValue);
+        return print;
+    }
 }

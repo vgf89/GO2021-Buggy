@@ -22,6 +22,9 @@ public class AdventurerController : MonoBehaviour
     [MinAttribute(0)]
     private int visionRadius;
 
+    [SerializeField]
+    private GameTiles gameTiles;
+
     private Vector3 adventurerDestination;
 
     public bool isDebugging;
@@ -37,7 +40,7 @@ public class AdventurerController : MonoBehaviour
         adventurerNavMeshAgent.updateRotation = false;
         adventurerNavMeshAgent.updateUpAxis = false;
 
-        if (adventurerNavMeshAgent != null == isDebugging)
+        if (adventurerNavMeshAgent != null || isDebugging)
             Debug.Log("Successfully set NaveMeshAgent from: " + transform.name);
 
     }
@@ -46,7 +49,8 @@ public class AdventurerController : MonoBehaviour
     void Update()
     {
         MouseHandling();
-        
+
+        SetExploring();
     }
 
 
@@ -65,6 +69,22 @@ public class AdventurerController : MonoBehaviour
                 Debug.Log("Setting " + transform.name + "'s destination to: " + mouseGridPos.ToString());
             adventurerNavMeshAgent.SetDestination(adventurerDestination);
         }
+    }
+
+    //Once a tile has been explored, set the neighboring tiles' new value
+    void SetExploring()
+    {
+        Vector3Int currentGridPos = map.WorldToCell(transform.position);
+        var gTileData = ScriptableObject.CreateInstance<GroundTileData>();
+
+        if (gameTiles.tiles.TryGetValue(currentGridPos, out gTileData))
+            if (!gTileData.isExplored)
+            {
+                gTileData.isExplored = true;
+                if (isDebugging)
+                    Debug.Log(transform.name + " has explored the ground tile at " + gTileData.worldPosition.ToString());
+                gameTiles.GetTileValues(gTileData.worldPosition);
+            }
     }
 
     private void OnDrawGizmos()

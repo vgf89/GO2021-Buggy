@@ -24,10 +24,10 @@ public class GameTiles : MonoBehaviour
             Destroy(gameObject);
         }*/
 
-        //Debug.Log(tilemap.cellBounds.xMin);
         //GetGridTilesInArray();
         GetGridTilesInDictionary();
         SetGridTileNeighbors();
+        GetAllTileValues();
     }
 
     //Adds all tiles from the Ground Tilemap and stores it into a 2D array. The 
@@ -35,15 +35,15 @@ public class GameTiles : MonoBehaviour
     {
         tilesArray = new GroundTileData[tilemap.size.x, tilemap.size.y];
 
-        foreach(Vector3Int pos in tilemap.cellBounds.allPositionsWithin)
+        foreach (Vector3Int pos in tilemap.cellBounds.allPositionsWithin)
         {
             var localPos = new Vector3Int(pos.x, pos.y, pos.z);
 
             if (!tilemap.HasTile(pos))
                 continue;
-            
+
             GroundTileData tileData = ScriptableObject.CreateInstance<GroundTileData>();
-            
+
             tileData.localPosition = localPos;
             tileData.worldPosition = tilemap.CellToWorld(localPos);
             tileData.tilemapMember = tilemap;
@@ -54,15 +54,16 @@ public class GameTiles : MonoBehaviour
         }
     }
 
+    //Finds all from the Ground Tilemap and stores in a Dictionary. The key is the tile's world position.
     private void GetGridTilesInDictionary()
     {
         tiles = new Dictionary<Vector3, GroundTileData>();
-        
-        foreach(Vector3Int pos in tilemap.cellBounds.allPositionsWithin)
+
+        foreach (Vector3Int pos in tilemap.cellBounds.allPositionsWithin)
         {
             var localPos = new Vector3Int(pos.x, pos.y, pos.z);
 
-            if (!tilemap.HasTile(localPos)) 
+            if (!tilemap.HasTile(localPos))
                 continue;
 
             var tile = ScriptableObject.CreateInstance<GroundTileData>();
@@ -72,7 +73,7 @@ public class GameTiles : MonoBehaviour
             tile.isExplored = false;
             tile.tileNeighbors = new Dictionary<Vector3, GroundTileData>();
             tile.tileValue = 0;
-            
+
 
             //Adds the tile with the key being the tile's position in the world
             tiles.Add(tile.worldPosition, tile);
@@ -80,6 +81,7 @@ public class GameTiles : MonoBehaviour
         }
     }
 
+    //After all ground tiles have their GroundTileData, find their neighbor
     private void SetGridTileNeighbors()
     {
         var groundTileData = ScriptableObject.CreateInstance<GroundTileData>();
@@ -106,10 +108,39 @@ public class GameTiles : MonoBehaviour
                 }
                 ;
             }
-            Debug.Log("Tile " + groundTile.Value.worldPosition.ToString() + " has " + groundTile.Value.tileNeighbors.Count + " neighbors.");
+            //Debug.Log("Tile " + groundTile.Value.worldPosition.ToString() + " has " + groundTile.Value.tileNeighbors.Count + " neighbors.");
         }
     }
 
+    public void GetAllTileValues()
+    {
+
+        foreach (KeyValuePair<Vector3, GroundTileData> groundTile in tiles)
+        {
+            int tempCounter = 0;
+            foreach (KeyValuePair<Vector3, GroundTileData> neighborTile in groundTile.Value.tileNeighbors)
+            {
+                //if the neighboring tiles have not been explored
+                if (!neighborTile.Value.isExplored)
+                {
+                    tempCounter++;
+                }
+            }
+            groundTile.Value.tileValue = tempCounter;
+            Debug.Log("Tile " + groundTile.Value.worldPosition.ToString() + " has a value of [" + groundTile.Value.tileValue + "]and [" + groundTile.Value.tileNeighbors.Count + "] neighbors");
+        }
+    }
+
+    public void GetTileValues(Vector3 tilePosition)
+    {
+        var groundTileData = tiles[tilePosition];
+        tiles[tilePosition].tileValue = 0;
+        foreach (KeyValuePair<Vector3, GroundTileData> neighborTile in groundTileData.tileNeighbors)
+        {
+            neighborTile.Value.tileValue -= 1;
+            Debug.Log("The tile at " + neighborTile.Value.worldPosition + " has a new value of [" + neighborTile.Value.tileValue +"].");
+        }
+    }
 
     // Update is called once per frame
     void Update()
