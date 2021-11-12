@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+// Implements the [ReadOnly] attribute in the Unity editor. See ReadOnlyAttribute.cs.
 using UnityEngine;
 using UnityEditor;
 

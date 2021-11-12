@@ -1,14 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /*
 StateSystem.cs and State.cs implement a Hierarchical Pushdown Automata.
 It is a combination of  Hierarchical States and a Pushdown Automata
 as described in Game Programming Patterns' Chapter II.7: State
 http://gameprogrammingpatterns.com/state.html
 */
+
+using UnityEngine;
 public abstract class State : MonoBehaviour
 {
     protected StateSystem stateSystem;

@@ -1,4 +1,6 @@
-using System.Collections;
+// Use this to check whether your trigger collider is colliding with anything else.
+// Use Physics layers and/or Tags to influence what colliders trigger this script.
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;

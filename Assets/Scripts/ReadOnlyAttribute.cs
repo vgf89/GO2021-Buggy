@@ -1,3 +1,5 @@
+// Adds a [ReadOnly] attribute so we can create read-only field in the inspector.
+// Check ReadOnlyDrawer.cs for the better half.
 using UnityEngine;
 using UnityEditor;
 /// <summary>
