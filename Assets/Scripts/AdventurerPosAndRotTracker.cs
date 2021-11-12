@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 /* This script stores The Adventurer's position and rotation within timeSaved seconds
  * 
@@ -12,16 +13,16 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
     //A class that stores a Vector2 position and float rotation
     class PosAndRot
     {
-        private Vector2 position;
+        private Vector3 position;
         private float rotation;
 
-        public PosAndRot(Vector2 pos, float rot)
+        public PosAndRot(Vector3 pos, float rot)
         {
             position = pos;
             rotation = rot;
         }
 
-        public Vector2 Position {
+        public Vector3 Position {
             get { return position; }
             set { position = value; }
             }
@@ -32,24 +33,32 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
         }
     }
 
-
+    [Tooltip("What game object you want to use to track the Adventurer")]
     public GameObject trackingGameObject;
 
     [Tooltip("How many seconds in the past that wants to be saved.\n MUST BE GREATER THAN 0")]
     [MinAttribute(0)]
     public int secondsSaved;
-    public bool isDebugging;
+
+    [Tooltip("Will display relevant console information from this script.")]
+    [SerializeField]
+    private bool isDebugging;
+    [Tooltip("Place the Tilemap for Ground here.")]
+    [SerializeField]
+    private Tilemap groundTilemap;
     Queue<PosAndRot> savePosAndRotQueue;
+    bool isTracking;
+    [SerializeField]
+    private bool drawGizmos;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        isTracking = false;
         //Instantiates Queue of PosAndRot objects
         savePosAndRotQueue = new Queue<PosAndRot>();
-        if (secondsSaved <= 0)
-        {
-            secondsSaved = 0;
-        }
+       
+        isTracking = true;
     }
 
     // Update is called once per frame
@@ -63,37 +72,46 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
         //If the secondsSaved is greater than 0, find The Adventurer's position and rotation and add it to the savePoseAndRotQueue
         if (secondsSaved > 0)
         {
-            Vector2 currentVector2 = new Vector2(trackingGameObject.transform.position.x,
-              trackingGameObject.transform.position.z);
+            Vector3Int currentGridPosition = groundTilemap.WorldToCell(trackingGameObject.transform.position);
             float currentRotation = trackingGameObject.transform.rotation.x;
-            SavePositionToQueue(currentVector2, currentRotation);
+            SavePositionToQueue(currentGridPosition, currentRotation);
             CheckPosAndRotQueue();
+            
         }
+        
     }
 
-    //Receives a Vector2 position and float rotation and that to savePosAndRotQueue
-    void SavePositionToQueue(Vector2 position, float rotation)
+    //Receives a Vector3 position relative to the grid and float rotation and that to savePosAndRotQueue
+    void SavePositionToQueue(Vector3 position, float rotation)
     {
         PosAndRot temp = new PosAndRot(position, rotation);
-        Debug.Log("temp Position: " + temp.Position);
-        Debug.Log("temp Rotation: " + temp.Rotation);
         //Adds to queue
         savePosAndRotQueue.Enqueue(temp);
         if(isDebugging)
             Debug.Log(string.Format("Enqueing: {0} at {1}‹.", temp.Position, temp.Rotation));
-        if (savePosAndRotQueue.Count > secondsSaved)
-            savePosAndRotQueue.Dequeue();
         if(isDebugging)
             Debug.Log(string.Format("SavePosAndRot Queue Count: {0}", savePosAndRotQueue.Count));
-        
+
     }
 
     //Double checks if at any moment there are too many PosAndRot in the queue 
     void CheckPosAndRotQueue()
     {
-        if (savePosAndRotQueue.Count > secondsSaved)
+        if (savePosAndRotQueue.Count >= secondsSaved * 60)
         {
             savePosAndRotQueue.Dequeue();
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        //Currently not working
+        if (isTracking && drawGizmos)
+        {
+            Gizmos.color = Color.yellow;
+            Vector3 trailPosition = new Vector3 (savePosAndRotQueue.Peek().Position.x, savePosAndRotQueue.Peek().Position.y, 0);
+            //Vector3 trailPosition = Vector3.zero;
+            Gizmos.DrawWireCube(trailPosition, new Vector3(1, 1, 0));
         }
     }
 

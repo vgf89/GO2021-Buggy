@@ -27,7 +27,11 @@ public class AdventurerController : MonoBehaviour
 
     private Vector3 adventurerDestination;
 
+    [Tooltip("Will display relevant console information from this script.")]
     public bool isDebugging;
+
+    [SerializeField]
+    private bool drawGizmo;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +44,7 @@ public class AdventurerController : MonoBehaviour
         adventurerNavMeshAgent.updateRotation = false;
         adventurerNavMeshAgent.updateUpAxis = false;
 
-        if (adventurerNavMeshAgent != null || isDebugging)
+        if (adventurerNavMeshAgent != null && isDebugging)
             Debug.Log("Successfully set NaveMeshAgent from: " + transform.name);
 
     }
@@ -83,32 +87,35 @@ public class AdventurerController : MonoBehaviour
                 gTileData.isExplored = true;
                 if (isDebugging)
                     Debug.Log(transform.name + " has explored the ground tile at " + gTileData.worldPosition.ToString());
-                gameTiles.GetTileValues(gTileData.worldPosition);
+                gameTiles.GetTileValueOfNeighbors(gTileData.worldPosition);
             }
     }
 
     private void OnDrawGizmos()
     {
-        Vector3Int intCurrentPos = map.WorldToCell(transform.position);
-
-        if (adventurerNavMeshAgent.hasPath)
+        if (drawGizmo)
         {
-            //Draws a blue wire cube at the Adventurer's destination
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireCube(adventurerDestination, new Vector3(1, 1, 0));
-        }
-        
-        //Displays vision radius USE THIS ALGORITHM FOR SETTING GROUNDDATATILES TO isExplored
-        for (int x = -visionRadius; x <= visionRadius; x++)
-        {
-            for (int y = -visionRadius; y <= visionRadius; y++)
+            Vector3Int intCurrentPos = map.WorldToCell(transform.position);
+            //Displays the Adventurer's destination in Grid
+            if (adventurerNavMeshAgent.hasPath)
             {
-                int absValue = Mathf.Abs(x) + Mathf.Abs(y);
-                if (absValue <= visionRadius)
+                //Draws a blue wire cube at the Adventurer's destination
+                Gizmos.color = Color.blue;
+                Gizmos.DrawWireCube(adventurerDestination, new Vector3(1, 1, 0));
+            }
+
+            //Displays vision radius USE THIS ALGORITHM FOR SETTING GROUNDDATATILES TO isExplored
+            for (int x = -visionRadius; x <= visionRadius; x++)
+            {
+                for (int y = -visionRadius; y <= visionRadius; y++)
+                {
+                    int absValue = Mathf.Abs(x) + Mathf.Abs(y);
+                    if (absValue <= visionRadius)
                     {
                         Gizmos.color = Color.green;
-                        Gizmos.DrawWireCube(intCurrentPos + new Vector3Int(x,y,0), new Vector3(1,1,0));
+                        Gizmos.DrawWireCube(intCurrentPos + new Vector3Int(x, y, 0), new Vector3(1, 1, 0));
                     }
+                }
             }
         }
     }

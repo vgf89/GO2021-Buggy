@@ -15,6 +15,12 @@ public class GameTiles : MonoBehaviour
 
     public GroundTileData[,] tilesArray;
 
+    [Tooltip("Will display relevant console information from this script.")]
+    [SerializeField]
+    private bool isDebugging;
+
+   
+
     void Awake()
     {
         if (instance == null)
@@ -30,7 +36,7 @@ public class GameTiles : MonoBehaviour
         GetAllTileValues();
     }
 
-    //Adds all tiles from the Ground Tilemap and stores it into a 2D array. The 
+    //Adds all tiles from the Ground Tilemap and stores it into a 2D array. CURRENTLY NOT IN USE
     private void GetGridTilesInArray()
     {
         tilesArray = new GroundTileData[tilemap.size.x, tilemap.size.y];
@@ -81,7 +87,7 @@ public class GameTiles : MonoBehaviour
         }
     }
 
-    //After all ground tiles have their GroundTileData, find their neighbor
+    //After all ground tiles have their GroundTileData, find their neighbor and add to the tileNeighbors dictionary
     private void SetGridTileNeighbors()
     {
         var groundTileData = ScriptableObject.CreateInstance<GroundTileData>();
@@ -112,6 +118,7 @@ public class GameTiles : MonoBehaviour
         }
     }
 
+    //Iterates through every tile in the dictionary and sets their tileValue relative to their tileNeighbors.
     public void GetAllTileValues()
     {
 
@@ -127,20 +134,42 @@ public class GameTiles : MonoBehaviour
                 }
             }
             groundTile.Value.tileValue = tempCounter;
-            Debug.Log("Tile " + groundTile.Value.worldPosition.ToString() + " has a value of [" + groundTile.Value.tileValue + "]and [" + groundTile.Value.tileNeighbors.Count + "] neighbors");
+            if (isDebugging)
+                Debug.Log(groundTile.Value.printData());
         }
     }
 
-    public void GetTileValues(Vector3 tilePosition)
+    //Mostly for tiles that have been explored. Find the tileData and adjust the tileNeighbor's tileValue.
+    public void GetTileValueOfNeighbors(Vector3 tilePosition)
     {
         var groundTileData = tiles[tilePosition];
-        tiles[tilePosition].tileValue = 0;
         foreach (KeyValuePair<Vector3, GroundTileData> neighborTile in groundTileData.tileNeighbors)
         {
-            neighborTile.Value.tileValue -= 1;
-            Debug.Log("The tile at " + neighborTile.Value.worldPosition + " has a new value of [" + neighborTile.Value.tileValue +"].");
+            int tempCounter = 0;
+            foreach (KeyValuePair<Vector3, GroundTileData> tile in neighborTile.Value.tileNeighbors)
+            {
+                //if the neighboring tiles have not been explored
+                if (!tile.Value.isExplored)
+                {
+                    tempCounter++;
+                }
+            }
+            neighborTile.Value.tileValue = tempCounter;
+            if (isDebugging)
+                Debug.Log("The tile at " + neighborTile.Value.worldPosition + " has a new value of [" + neighborTile.Value.tileValue + "].");
+        }
+        CheckAllTilesIsExplored();
+    }
+
+    //Check if all tiles from the GroundTileMap isExplored
+    public void CheckAllTilesIsExplored()
+    {
+        foreach (KeyValuePair<Vector3, GroundTileData> groundTile in tiles)
+        {
+            groundTile.Value.CheckisExplored();
         }
     }
+  
 
     // Update is called once per frame
     void Update()

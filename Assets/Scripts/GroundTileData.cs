@@ -30,8 +30,6 @@ public class GroundTileData : ScriptableObject
     public void GetTileValue()
     {
         int tempCounter = 0;
-        
-
         foreach (KeyValuePair<Vector3, GroundTileData> groundTileData in tileNeighbors)
         {
             if (groundTileData.Value.isExplored)
@@ -52,5 +50,11 @@ public class GroundTileData : ScriptableObject
             "\ntileValue = {4}", 
             localPosition, worldPosition, isExplored, tileNeighbors.Count, tileValue);
         return print;
+    }
+
+    public void CheckisExplored()
+    {
+        if (isExplored)
+            tileValue = 0;
     }
 }
