@@ -40,10 +40,6 @@ public class AdventurerController : MonoBehaviour
         if (adventurerDestination == null)
             adventurerNavMeshAgent = GetComponent<NavMeshAgent>();
 
-        //Prevents Agent from rotating away from the Camera
-        adventurerNavMeshAgent.updateRotation = false;
-        adventurerNavMeshAgent.updateUpAxis = false;
-
         if (adventurerNavMeshAgent != null && isDebugging)
             Debug.Log("Successfully set NaveMeshAgent from: " + transform.name);
 
