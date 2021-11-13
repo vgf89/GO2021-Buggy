@@ -4923,7 +4923,7 @@ MonoBehaviour:
   visionRadius: 2
   gameTiles: {fileID: 879592607}
   isDebugging: 1
-  drawGizmo: 0
+  drawGizmo: 1
 --- !u!195 &1065306077
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5024,7 +5024,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 0}
-  isDebugging: 1
+  movementCost: 0
+  isDebugging: 0
   behavior: 0
 --- !u!1 &1419434963
 GameObject:
