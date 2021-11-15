@@ -5,8 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class GameTiles : MonoBehaviour
 {
-    private const string GROUNDTILENAMESTRING = "Ground Tile";
-    private const string WALLTILENAMESTRING = "Wall Tile";
+    public const string GROUNDTILENAMESTRING = "Ground Tile";
+    public const string WALLTILENAMESTRING = "Wall Tile";
 
 
     [MinAttribute(0)]
@@ -95,7 +95,7 @@ public class GameTiles : MonoBehaviour
             tile.isExplored = false;
             tile.tileNeighbors = new Dictionary<Vector3, TileData>();
             tile.tileValue = 0f;
-
+            tile.efficiencyScore = 0f;
 
             //Adds the tile with the key being the tile's position in the world
             tiles.Add(tile.worldPosition, tile);

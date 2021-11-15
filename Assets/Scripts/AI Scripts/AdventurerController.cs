@@ -113,7 +113,7 @@ public class AdventurerController : MonoBehaviour
                     if (absValue <= visionRadius)
                     {
                         Gizmos.color = Color.green;
-                        Gizmos.DrawWireCube(intCurrentPos + new Vector3Int(x, y, 0), new Vector3(1, 1, 0));
+                        Gizmos.DrawWireCube(intCurrentPos + new Vector3Int(x, y, 0) + new Vector3 (0.5f, 0.5f, 0), new Vector3(1, 1, 0));
                     }
                 }
             }

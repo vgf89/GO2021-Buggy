@@ -5,11 +5,17 @@ using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(NavMeshAgent))]
+
 public class AdventurerAIBehavior : MonoBehaviour
 {
 
     [SerializeField]
-    private Tilemap map;
+    private Tilemap groundTileMap;
+    [SerializeField]
+    private Tilemap wallTileMap;
+    [Tooltip("Get the GameTiles Component from Grid")]
+    [SerializeField]
+    private GameTiles gameTiles;
     [SerializeField]
     [Tooltip("Movement cost to move a tile.")]
     [MinAttribute(0)]
@@ -48,7 +54,8 @@ public class AdventurerAIBehavior : MonoBehaviour
     {
         diagMovementCost = Mathf.Sqrt(Mathf.Pow(movementCost, 2));
         navAgent = GetComponent<NavMeshAgent>();
-        behavior = behaviors.Exploring;
+        //behavior = behaviors.DoNothing;
+        tiles = gameTiles.tiles;
 
         if (navAgent != null && isDebugging)
             Debug.Log("navAgent initialized");
@@ -82,8 +89,10 @@ public class AdventurerAIBehavior : MonoBehaviour
     void FindPath()
     {
         //Set the temp position to itself starting out, then compare efficiency score
-        Vector3 adventurerDestination = this.transform.position + new Vector3(NAVAGENTOFFPOSITIONOFFSET, NAVAGENTOFFPOSITIONOFFSET, 0);
-        var currentTileData = tiles[adventurerDestination];
+        
+        Vector3Int currentGridPos = groundTileMap.WorldToCell(transform.position);
+        Vector3 adventurerDestination = currentGridPos;
+        var currentTileData = tiles[currentGridPos];
         //This tempScore will mostly likely start out a zero.
         float tempScore = currentTileData.efficiencyScore;
         foreach (KeyValuePair<Vector3, TileData> neighborData in currentTileData.tileNeighbors)
@@ -91,8 +100,16 @@ public class AdventurerAIBehavior : MonoBehaviour
             if (neighborData.Value.efficiencyScore > tempScore && !neighborData.Value.isExplored)
             {
                 adventurerDestination = neighborData.Value.worldPosition + new Vector3(NAVAGENTOFFPOSITIONOFFSET, NAVAGENTOFFPOSITIONOFFSET, 0);
+                adventurerDestination.z = 0f;
+                tempScore = neighborData.Value.efficiencyScore;
+                Debug.Log(adventurerDestination.ToString());
             }
         }
+        Vector3Int currentIntPos = Vector3Int.FloorToInt(transform.position);
+        currentIntPos.z = 0;
+        //If a tile can't be decided, SetDestination to the closes unexplored GroundTile
+        if ((tempScore == 0f) && (adventurerDestination.Equals(currentIntPos)))
+            adventurerDestination = FindClosestUnexploredTile(adventurerDestination) + new Vector3(NAVAGENTOFFPOSITIONOFFSET, NAVAGENTOFFPOSITIONOFFSET, 0);
         navAgent.SetDestination(adventurerDestination);
     }
 
@@ -146,5 +163,26 @@ public class AdventurerAIBehavior : MonoBehaviour
 
 
         return 0;
+    }
+
+    //Finds the closest unexplored groundTile
+    Vector3 FindClosestUnexploredTile(Vector3 _currentPosition)
+    {
+        float tempDistance = float.MaxValue;
+        Vector3 closestPosition = _currentPosition;
+
+        foreach (KeyValuePair<Vector3, TileData> tileData in tiles)
+        {
+            Vector3 checkingPosition = tileData.Value.worldPosition;
+            if (tiles[checkingPosition].tileName.Equals(GameTiles.GROUNDTILENAMESTRING) && !tiles[checkingPosition].isExplored 
+                && (Vector3.Distance(_currentPosition, checkingPosition) < tempDistance))
+            {
+                tempDistance = Vector3.Distance(_currentPosition, checkingPosition);
+                closestPosition = tileData.Value.worldPosition;
+            }
+        }
+        closestPosition.z = 0f;
+        //Debug.Log("Finding Closest Unexplored Tile from" + _currentPosition.ToString() + " to " + closestPosition.ToString() + " at a distance of " + tempDistance);
+        return closestPosition;
     }
 }
