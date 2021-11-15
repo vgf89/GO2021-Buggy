@@ -4883,8 +4883,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d18b5a37594d88746a4062d66b96db8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 1487940465}
-  isDebugging: 1
+  groundTileNeighborValue: 1
+  wallTileNeighborValue: 1.4
+  groundTileMap: {fileID: 1487940465}
+  wallTileMap: {fileID: 355823981}
+  isDebugging: 0
 --- !u!1 &1065306075
 GameObject:
   m_ObjectHideFlags: 0
@@ -4922,7 +4925,7 @@ MonoBehaviour:
   map: {fileID: 355823981}
   visionRadius: 2
   gameTiles: {fileID: 879592607}
-  isDebugging: 1
+  isDebugging: 0
   drawGizmo: 1
 --- !u!195 &1065306077
 NavMeshAgent:
@@ -5027,6 +5030,8 @@ MonoBehaviour:
   movementCost: 0
   isDebugging: 0
   behavior: 0
+  currentKey: {x: 0, y: 0, z: 0}
+  neighborKey: {x: 0, y: 0, z: 0}
 --- !u!1 &1419434963
 GameObject:
   m_ObjectHideFlags: 0
