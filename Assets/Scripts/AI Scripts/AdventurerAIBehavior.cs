@@ -27,7 +27,7 @@ public class AdventurerAIBehavior : MonoBehaviour
     [SerializeField]
     [Tooltip("The depth/tiles away from the current position to consider for exploreation.\nThe original value for this is 2.")]
     [MinAttribute(1)]
-    private const int DEPTHMAX = 2;
+    private int DEPTHMAX = 5;
 
     //PLEASE TREAT AS A CONSTANT
     private float DIAGONALDISTANCE = Vector3.Distance(new Vector3(0, 0, 0), new Vector3(1, 1, 0));
@@ -37,6 +37,7 @@ public class AdventurerAIBehavior : MonoBehaviour
     public enum behaviors
     {
         DoNothing,
+        Thinking,
         Exploring, 
         InCombat,
         CompletingObjective
@@ -47,19 +48,29 @@ public class AdventurerAIBehavior : MonoBehaviour
 
     private Dictionary<Vector3, TileData> tiles;
 
-    private const float NAVAGENTOFFPOSITIONOFFSET = 0.5f; 
+    private const float NAVAGENTOFFPOSITIONOFFSET = 0.5f;
+
+    [SerializeField]
+    private Queue<TileData> tileDataQueue;
+
+    private bool isThinking;
+
+    private Vector3 mostEfficientTilePosition;
+    private float mostEfficientScore;
 
     // Start is called before the first frame update
     void Start()
     {
+        isThinking = false;
         diagMovementCost = Mathf.Sqrt(Mathf.Pow(movementCost, 2));
         navAgent = GetComponent<NavMeshAgent>();
         //behavior = behaviors.DoNothing;
         tiles = gameTiles.tiles;
-
+        tileDataQueue = new Queue<TileData>();
         if (navAgent != null && isDebugging)
             Debug.Log("navAgent initialized");
 
+        
     }
 
     // Update is called once per frame
@@ -67,14 +78,31 @@ public class AdventurerAIBehavior : MonoBehaviour
     {
         switch(behavior)
         {
-            case behaviors.DoNothing:
-                CalculateEfficiency(currentKey, neighborKey);
+            case behaviors.Thinking:
+                if (!isThinking)
+                {
+                    isThinking = true;
+                    //BFS(FindCurrentTile());
+                    var tempTileData = FindCurrentTile();
+                    tempTileData.isVisited = true;
+                    tileDataQueue.Enqueue(tempTileData);
+                    BFSRecursion(tileDataQueue, 0);
+                    if (isDebugging)
+                    Debug.Log("Most efficient score is " + mostEfficientScore + " at " + mostEfficientTilePosition.ToString());
+                    navAgent.SetDestination(mostEfficientTilePosition);
+                    behavior = behaviors.Exploring;
+                    //isThinking = false;
+                    //tileDataQueue.Clear();
+                }
                 break;
 
             case behaviors.Exploring:
                 if (!navAgent.hasPath)
                 {
-                    FindPath();
+                    isThinking = false;
+                    mostEfficientScore = -1;
+                    mostEfficientTilePosition = transform.position;
+                    behavior = behaviors.Thinking;
                 }
                 break;
         }
@@ -108,9 +136,9 @@ public class AdventurerAIBehavior : MonoBehaviour
         Vector3Int currentIntPos = Vector3Int.FloorToInt(transform.position);
         currentIntPos.z = 0;
         //If a tile can't be decided, SetDestination to the closes unexplored GroundTile
-        if ((tempScore == 0f) && (adventurerDestination.Equals(currentIntPos)))
+        /*if ((tempScore == 0f) && (adventurerDestination.Equals(currentIntPos)))
             adventurerDestination = FindClosestUnexploredTile(adventurerDestination) + new Vector3(NAVAGENTOFFPOSITIONOFFSET, NAVAGENTOFFPOSITIONOFFSET, 0);
-        navAgent.SetDestination(adventurerDestination);
+        navAgent.SetDestination(adventurerDestination);*/
     }
 
     //Hardcopying a tile's TileData
@@ -124,8 +152,16 @@ public class AdventurerAIBehavior : MonoBehaviour
         tileData.isExplored = _tileData.isExplored;
         tileData.tileNeighbors = _tileData.tileNeighbors;
         tileData.tileValue = _tileData.tileValue;
+        tileData.efficiencyScore = _tileData.efficiencyScore;
 
         return tileData;
+    }
+
+    TileData FindCurrentTile()
+    {
+        Vector3Int currentGridPos = groundTileMap.WorldToCell(transform.position);
+
+        return tiles[currentGridPos];
     }
 
     void DepthSearching(TileData _tileData, int depthCounter)
@@ -143,26 +179,94 @@ public class AdventurerAIBehavior : MonoBehaviour
         }
     }
 
-    //Determines efficiency by the tileValue divided by the movement cost [Depends whether the movement is a diagnoal or straight]]
-    float CalculateEfficiency(Vector3 _currentTileKey, Vector3 _neighboryKey)
+    void BFS(TileData src)
     {
-        float distance = Vector3.Distance(_currentTileKey, _neighboryKey);
-        
-        //Determines if the distance is diagonal
-        if(distance == DIAGONALDISTANCE)
+        int depthCounter = 0;
+        float tempEfficiencyScore = -1;
+        Vector3 efficientDestination = src.worldPosition;
+
+        tileDataQueue.Enqueue(src);
+        src.isVisited = true;
+
+        while (tileDataQueue.Count != 0)
         {
-            Debug.Log("diagonal");
-            //return (tileDictionary[_neighborKey].tileValue / diagMovementCost);
-        }
-        //Determines if the distance is nondiagonal
-        else if(distance == NONDIAGONALDISTANCE)
+           
+            var groundTileData = HardCopyTileData(tileDataQueue.Dequeue());
+            Debug.Log("Tile at " + groundTileData.worldPosition + "has been dequeued.");
+            //visit the Dequeued neighbors tiles and add them to the queue
+            foreach (KeyValuePair<Vector3, TileData> neighborTileData in groundTileData.tileNeighbors)
             {
-                Debug.Log("Nondiagonal");
-                //return (tileDictionary[_neighborKey].tileValue / movementCost);
+                //If already in the queue or TileData is for a wall tile
+                if (!neighborTileData.Value.isVisited || neighborTileData.Value.tileValue.Equals(GameTiles.GROUNDTILENAMESTRING))
+                {
+                    //Enqueues the neighbors to be visited later
+                    tileDataQueue.Enqueue(neighborTileData.Value);
+                    Debug.Log("Tile at " + neighborTileData.Value.worldPosition + "has been enqueued.");
+                    neighborTileData.Value.isVisited = true;
+                }
             }
 
+            //Determine the efficiency and set it to the TileData's efficiency score
+            groundTileData.efficiencyScore = CalculateEfficiency(groundTileData);
 
-        return 0;
+            if (groundTileData.efficiencyScore > tempEfficiencyScore)
+            {
+                tempEfficiencyScore = groundTileData.efficiencyScore;
+                efficientDestination = groundTileData.worldPosition;
+            }
+            
+        }
+        tileDataQueue.Clear();
+        Debug.Log("The most efficient route is going to " + efficientDestination + " with an efficiency score of " + tempEfficiencyScore);
+    }
+
+    void BFSRecursion (Queue<TileData> q, int depthCounter)
+    {
+        if (depthCounter >= DEPTHMAX || q.Count == 0)
+        {
+            //isThinking = false;
+            //Debug.Log("Done");
+            return;
+        }
+
+        
+        Vector3 efficientDestination = transform.position;
+
+        //Dequeue 
+        var groundTileData = q.Dequeue();
+        depthCounter++;
+        float tempEfficiencyScore = CalculateEfficiency(groundTileData);
+        if (tempEfficiencyScore > mostEfficientScore)
+        {
+            mostEfficientScore = tempEfficiencyScore;
+            mostEfficientTilePosition = groundTileData.worldPosition;
+        }
+        if(isDebugging)
+            Debug.Log("Tile at " + groundTileData.worldPosition + "has been dequeued.");
+
+        //Queue its neighbors
+        foreach (KeyValuePair<Vector3, TileData> neighborTileData in groundTileData.tileNeighbors)
+        {
+            if (!neighborTileData.Value.isVisited && neighborTileData.Value.tileName.Equals(GameTiles.GROUNDTILENAMESTRING))
+            {
+                neighborTileData.Value.isVisited = true;
+                q.Enqueue(neighborTileData.Value);
+                if(isDebugging)
+                    Debug.Log("Tile at " + neighborTileData.Value.worldPosition + "has been enqueued at a depth of [" + depthCounter + "].");
+            }
+        }
+        
+        
+        BFSRecursion(q, depthCounter);
+    }
+
+    //Determines efficiency by the tileValue divided by the movement cost [Depends whether the movement is a diagnoal or straight]]
+    float CalculateEfficiency(TileData _tileData)
+    {
+        float moveCost = Vector3.Distance(_tileData.worldPosition, transform.position);
+        float effScore = _tileData.tileValue / (moveCost * 10);
+
+        return effScore;
     }
 
     //Finds the closest unexplored groundTile
@@ -182,7 +286,8 @@ public class AdventurerAIBehavior : MonoBehaviour
             }
         }
         closestPosition.z = 0f;
-        //Debug.Log("Finding Closest Unexplored Tile from" + _currentPosition.ToString() + " to " + closestPosition.ToString() + " at a distance of " + tempDistance);
+        Debug.Log("Finding Closest Unexplored Tile from" + _currentPosition.ToString() + " to " + closestPosition.ToString() + " at a distance of " + tempDistance);
         return closestPosition;
     }
+    
 }

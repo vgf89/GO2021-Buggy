@@ -20,6 +20,8 @@ public class TileData : ScriptableObject
     //Important Data for Searching
 
     public bool isExplored { get; set; }
+    //For Queue visiting
+    public bool isVisited { get; set; }
 
     //Neighboring Tiles
     public Dictionary<Vector3, TileData> tileNeighbors;
