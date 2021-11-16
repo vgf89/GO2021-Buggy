@@ -89,7 +89,7 @@ public class AdventurerAIBehavior : MonoBehaviour
                     BFSRecursion(tileDataQueue, 0);
                     if (isDebugging)
                     Debug.Log("Most efficient score is " + mostEfficientScore + " at " + mostEfficientTilePosition.ToString());
-                    navAgent.SetDestination(mostEfficientTilePosition);
+                    navAgent.SetDestination(mostEfficientTilePosition + new Vector3(0.5f,0.5f,0));
                     behavior = behaviors.Exploring;
                     //isThinking = false;
                     //tileDataQueue.Clear();
