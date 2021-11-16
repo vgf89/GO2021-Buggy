@@ -5,6 +5,7 @@ using UnityEngine;
 public class StateEnemyChase : State
 {
     [SerializeField] private TriggerCheck adventurerDetector;
+    [SerializeField] private TriggerCheck adventurerDetectorClose;
     [SerializeField] private float speed = 0.5f;
 
     private GameObject adventurer;
@@ -26,6 +27,12 @@ public class StateEnemyChase : State
         if (!adventurerDetector.isColliding()) {
             stateSystem.popState();
             //Debug.Log("Lost player");
+            return true;
+        }
+
+        if (adventurerDetectorClose.isColliding()) {
+            //Debug.Log("Player close enough to attack");
+            stateSystem.pushState(stateSystem.GetComponentInChildren<StateEnemyMeleeAttack>());
             return true;
         }
 

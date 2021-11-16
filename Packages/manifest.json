@@ -46,7 +46,8 @@
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
     "com.cammin.ldtkunity": "2.1.7",
-    "com.h8man.2d.navmeshplus": "https://github.com/h8man/NavMeshPlus.git#master"
+    "com.h8man.2d.navmeshplus": "https://github.com/h8man/NavMeshPlus.git#master",
+    "io.tinu.asepriteimporter": "1.0.4"
   },
   "scopedRegistries": [
     {
@@ -54,7 +55,8 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "com.cammin.ldtkunity",
-        "com.openupm"
+        "com.openupm",
+        "io.tinu.asepriteimporter"
       ]
     }
   ]
