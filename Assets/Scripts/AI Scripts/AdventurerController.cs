@@ -64,7 +64,7 @@ public class AdventurerController : MonoBehaviour
             mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPos.z = 0f;
             Vector3Int mouseGridPos = map.WorldToCell(mouseWorldPos);
-            adventurerDestination = new Vector3(0.5f, 0.5f, 0) + mouseGridPos;
+            adventurerDestination = new Vector3 (0.5f, 0.5f, 0) + mouseGridPos;
             if(isDebugging)
                 Debug.Log("Setting " + transform.name + "'s destination to: " + mouseGridPos.ToString());
             adventurerNavMeshAgent.SetDestination(adventurerDestination);
@@ -75,7 +75,7 @@ public class AdventurerController : MonoBehaviour
     void SetExploring()
     {
         Vector3Int currentGridPos = map.WorldToCell(transform.position);
-        var gTileData = ScriptableObject.CreateInstance<GroundTileData>();
+        var gTileData = ScriptableObject.CreateInstance<TileData>();
 
         if (gameTiles.tiles.TryGetValue(currentGridPos, out gTileData))
             if (!gTileData.isExplored)
@@ -109,7 +109,7 @@ public class AdventurerController : MonoBehaviour
                     if (absValue <= visionRadius)
                     {
                         Gizmos.color = Color.green;
-                        Gizmos.DrawWireCube(intCurrentPos + new Vector3Int(x, y, 0), new Vector3(1, 1, 0));
+                        Gizmos.DrawWireCube(intCurrentPos + new Vector3Int(x, y, 0) + new Vector3 (0.5f, 0.5f, 0), new Vector3(1, 1, 0));
                     }
                 }
             }
