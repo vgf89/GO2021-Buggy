@@ -81,14 +81,25 @@ public class AdventurerController : MonoBehaviour
         Vector3Int currentGridPos = map.WorldToCell(transform.position);
         var gTileData = ScriptableObject.CreateInstance<TileData>();
 
-        if (gameTiles.tiles.TryGetValue(currentGridPos, out gTileData))
-            if (!gTileData.isExplored)
+        //Displays vision radius USE THIS ALGORITHM FOR SETTING GROUNDDATATILES TO isExplored
+        for (int x = -visionRadius; x <= visionRadius; x++)
+        {
+            for (int y = -visionRadius; y <= visionRadius; y++)
             {
-                gTileData.isExplored = true;
-                if (isDebugging)
-                    Debug.Log(transform.name + " has explored the ground tile at " + gTileData.worldPosition.ToString());
-                gameTiles.GetTileValueOfNeighbors(gTileData.worldPosition);
+                int absValue = Mathf.Abs(x) + Mathf.Abs(y);
+                if (absValue <= visionRadius)
+                {
+                    if (gameTiles.tiles.TryGetValue(currentGridPos + new Vector3Int(x, y, 0), out gTileData))
+                        if (!gTileData.isExplored)
+                        {
+                            gTileData.isExplored = true;
+                            if (isDebugging)
+                                Debug.Log(transform.name + " has explored the ground tile at " + gTileData.worldPosition.ToString());
+                            gameTiles.GetTileValueOfNeighbors(gTileData.worldPosition);
+                        }
+                }
             }
+        }
     }
 
     private void OnDrawGizmos()
