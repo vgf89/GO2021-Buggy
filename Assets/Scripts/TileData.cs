@@ -32,19 +32,6 @@ public class TileData : ScriptableObject
     public const string GROUNDTILENAMESTRING = "Ground Tile";
     public const string WALLTILENAMESTRING = "Wall Tile";
 
-    /*
-    public void GetTileValue()
-    {
-        int tempCounter = 0;
-        foreach (KeyValuePair<Vector3, GroundTileData> groundTileData in tileNeighbors)
-        {
-            if (groundTileData.Value.isExplored)
-                tempCounter++;
-        }
-
-        tileValue = tempCounter;
-    }
-    */
 
     public string printData()
     {
@@ -54,8 +41,9 @@ public class TileData : ScriptableObject
             "\nworldPosition {2}" +
             "\nisExplored [{3}]" +
             "\nhas [{4}] neighbors" +
-            "\ntileValue = {5}", 
-            tileName, localPosition, worldPosition, isExplored, tileNeighbors.Count, tileValue);
+            "\ntileValue = {5}" +
+            "\nisVisited [{6}]", 
+            tileName, localPosition, worldPosition, isExplored, tileNeighbors.Count, tileValue, isVisited);
         return print;
     }
 

@@ -5347,8 +5347,8 @@ MonoBehaviour:
   groundTileMap: {fileID: 1487940465}
   wallTileMap: {fileID: 355823981}
   gameTiles: {fileID: 879592607}
-  movementCost: 10
-  DEPTHMAX: 2
+  navAgent: {fileID: 0}
+  DEPTHMAX: 3
   isDebugging: 0
   behavior: 1
   currentKey: {x: 0, y: 0, z: 0}

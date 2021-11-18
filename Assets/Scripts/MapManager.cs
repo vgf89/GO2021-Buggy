@@ -48,17 +48,9 @@ public class MapManager : MonoBehaviour
         //calls the dictionary of tiles
         var tilesDictionary = GameTiles.instance.tiles;
 
-        /*
-        //Find the tilebase from the world position that has been right clicked
-        if (tilesDictionary.TryGetValue(worldPoint, out groundTileData))
-        {
-            groundTileData.isExplored = !groundTileData.isExplored;
-            Debug.Log("Tile at " + groundTileData.worldPosition.ToString() + " set isExplored = " + groundTileData.isExplored);
-        }*/
 
         if (tilesDictionary.TryGetValue(worldPoint, out groundTileData))
         {
-            //Debug.Log("Tile at " + groundTileData.worldPosition.ToString() + " has [" + groundTileData.tileNeighbors.Count + "] neighbors and isExplored = " + groundTileData.isExplored);
             Debug.Log(groundTileData.printData());
         }
     }
