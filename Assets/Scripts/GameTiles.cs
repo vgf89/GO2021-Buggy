@@ -192,7 +192,7 @@ public class GameTiles : MonoBehaviour
         CheckAllTilesIsExplored();
     }
 
-    //Check if all tiles from the GroundTileMap isExplored
+    //Check if all tiles from the GroundTileMap isExplored, if so, set the tileValue to 0
     public void CheckAllTilesIsExplored()
     {
         foreach (KeyValuePair<Vector3, TileData> groundTile in tiles)
@@ -200,8 +200,26 @@ public class GameTiles : MonoBehaviour
             groundTile.Value.CheckisExplored();
         }
     }
-  
 
+    //Check if all ground tiles in the dictionary have been explored
+    public bool AllTilesExplored()
+    {
+        foreach (KeyValuePair<Vector3, TileData> groundTile in tiles)
+        {
+            if (groundTile.Value.tileName.Equals(GROUNDTILENAMESTRING))
+                if (!groundTile.Value.isExplored)
+                    return false;
+        }
+        return true;
+    }
+
+    public void ResetVisiting()
+    {
+        foreach (KeyValuePair<Vector3, TileData> groundTile in tiles)
+        {
+            groundTile.Value.isVisited = false;
+        }
+    }
     // Update is called once per frame
     void Update()
     {

@@ -34,7 +34,8 @@ public class AdventurerAIBehavior : MonoBehaviour
         Thinking,
         Exploring, 
         InCombat,
-        CompletingObjective
+        CompletingObjective,
+        AllTilesExplored
     }
     public behaviors behavior;
 
@@ -71,22 +72,35 @@ public class AdventurerAIBehavior : MonoBehaviour
                 if (!isThinking)
                 {
                     isThinking = true;
+                    if (gameTiles.AllTilesExplored())
+                    {
+                        tileDataQueue.Clear();
+                        behavior = behaviors.AllTilesExplored;
+                        break;
+                    }
                     var tempTileData = FindCurrentTile();
                     tempTileData.isVisited = true;
+                    gameTiles.CheckAllTilesIsExplored();
+                    gameTiles.GetAllTileValues();
                     tileDataQueue.Enqueue(tempTileData);
                     BFSRecursion(tileDataQueue, 0);
                     FindDestination();
                     behavior = behaviors.Exploring;
+                    break;
                 }
                 break;
 
             case behaviors.Exploring:
                 if (!navAgent.hasPath)
                 {
+                    mostEfficientScore = 0;
                     isThinking = false;
-                    mostEfficientScore = -1;
                     behavior = behaviors.Thinking;
+                    break;
                 }
+                break;
+            case behaviors.AllTilesExplored:
+                navAgent.autoBraking = true;
                 break;
         }
 
@@ -95,11 +109,23 @@ public class AdventurerAIBehavior : MonoBehaviour
     void FindDestination()
     {
         Vector3 destination = transform.position;
-        int randomIndex = Random.Range(0, mostEfficientTilePositions.Count);
-        destination = mostEfficientTilePositions[randomIndex];
-        if (isDebugging)
-            Debug.Log("Most efficient score is " + mostEfficientScore + " at " + destination.ToString());
-        navAgent.SetDestination(destination  + new Vector3(0.5f,0.5f,0));
+        int tilePositionsCount = mostEfficientTilePositions.Count;
+        //If there are no tile positions in the list
+        if (tilePositionsCount != 0)
+        {
+            int randomIndex = Random.Range(0, tilePositionsCount);
+            destination = mostEfficientTilePositions[randomIndex];
+            if (isDebugging)
+                Debug.Log("Most efficient score is " + mostEfficientScore + " at " + destination.ToString());
+        }
+        else
+        {
+            destination = FindClosestUnexploredTile(transform.position);
+        }
+        
+        navAgent.SetDestination(destination + new Vector3(0.5f, 0.5f, 0));
+        mostEfficientTilePositions.Clear();
+        tileDataQueue.Clear();
     }
 
     //Make a copy of the Dictionary of tiles
@@ -191,20 +217,30 @@ public class AdventurerAIBehavior : MonoBehaviour
 
     void BFSRecursion (Queue<TileData> q, int depthCounter)
     {
-        if (depthCounter >= DEPTHMAX || q.Count == 0)
+        //Condition to break the recursive process
+        if (q.Count == 0)
         {
             //isThinking = false;
             //Debug.Log("Done");
             return;
         }
 
-        
         Vector3 efficientDestination = transform.position;
 
         //Dequeue 
-        var groundTileData = HardCopyTileData(q.Dequeue());
+        var groundTileData = q.Dequeue();
         depthCounter++;
-        //Processe
+        
+        //Another condition to break the recursive process
+        if (depthCounter > DEPTHMAX)
+        {
+            //isThinking = false;
+            //Debug.Log("Done");
+            return;
+        }
+
+        //Processes for non explored tiles
+        //if (!groundTileData.isExplored)
         EfficiencyHandling(groundTileData);
 
         if (isDebugging)
@@ -216,7 +252,7 @@ public class AdventurerAIBehavior : MonoBehaviour
             if (!neighborTileData.Value.isVisited && neighborTileData.Value.tileName.Equals(GameTiles.GROUNDTILENAMESTRING))
             {
                 neighborTileData.Value.isVisited = true;
-                q.Enqueue(HardCopyTileData(neighborTileData.Value));
+                q.Enqueue(neighborTileData.Value);
                 if(isDebugging)
                     Debug.Log("Tile at " + neighborTileData.Value.worldPosition + "has been enqueued at a depth of [" + depthCounter + "].");
             }
@@ -233,7 +269,11 @@ public class AdventurerAIBehavior : MonoBehaviour
         float moveCost = Vector3.Distance(_tileData.worldPosition, transform.position);
         float effScore = _tileData.tileValue / (moveCost * 10);
 
-
+        //if tileValue is 0, do nothing. This is so if all tiles within the DEPTHMAX range have been explored find the closest unexplored tile to the Adventurer.
+        if (effScore == 0)
+        {
+            return;
+        }
         if (effScore >= mostEfficientScore)
         {
             mostEfficientScore = effScore;
@@ -266,9 +306,9 @@ public class AdventurerAIBehavior : MonoBehaviour
             }
         }
         closestPosition.z = 0f;
-        Debug.Log("Finding Closest Unexplored Tile from" + _currentPosition.ToString() + " to " + closestPosition.ToString() + " at a distance of " + tempDistance);
+        if (isDebugging)
+            Debug.Log("Finding Closest Unexplored Tile from" + _currentPosition.ToString() + " to " + closestPosition.ToString() + " at a distance of " + tempDistance);
         return closestPosition;
     }
     
-  
 }
