@@ -89,6 +89,10 @@ public class AdventurerController : MonoBehaviour
                         if (!gTileData.isExplored)
                         {
                             gTileData.isExplored = true;
+
+                            // Color the tile to show it's been explored
+                            gameTiles.ColorExploredTile(gTileData);
+
                             if (isDebugging)
                                 Debug.Log(transform.name + " has explored the ground tile at " + gTileData.worldPosition.ToString());
                             gameTiles.GetTileValueOfNeighbors(gTileData.worldPosition);

@@ -31,6 +31,11 @@ public class GameTiles : MonoBehaviour
     [Tooltip("Will display relevant console information from this script.")]
     [SerializeField]
     private bool isDebugging;
+
+    [SerializeField]
+    private Color unexploredTileColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+    [SerializeField]
+    private Color exploredTileColor = Color.white;
     
    
 
@@ -47,6 +52,7 @@ public class GameTiles : MonoBehaviour
         tiles = new Dictionary<Vector3, TileData>();
 
         GetGridTilesInDictionary(groundTileMap, GROUNDTILENAMESTRING);
+        SetAllUnexploredTileColors(groundTileMap);
         GetGridTilesInDictionary(wallTileMap, WALLTILENAMESTRING);
         SetGridTileNeighbors();
         GetAllTileValues();
@@ -101,6 +107,14 @@ public class GameTiles : MonoBehaviour
             tiles.Add(tile.worldPosition, tile);
             //Debug.Log("Tile from " + tile.worldPosition + " has been added to the tiles Dictionary.");
         }
+    }
+
+    private void SetAllUnexploredTileColors(Tilemap _tileMap) {
+        foreach (Vector3Int pos in _tileMap.cellBounds.allPositionsWithin) {
+            if (_tileMap.HasTile(pos)) {
+                ColorUnexploredTile(pos);
+            }
+        }            
     }
 
 
@@ -223,6 +237,35 @@ public class GameTiles : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+    }
+
+    public void ColorExploredTile(TileData tile) {
+        ColorTile(tile, exploredTileColor);
+    }
+
+    public void ColorUnexploredTile(TileData tile) {
+        ColorTile(tile, unexploredTileColor);
+    }
+
+    public void ColorExploredTile(Vector3Int pos) {
+        ColorTile(pos, exploredTileColor);
+    }
+
+    public void ColorUnexploredTile(Vector3Int pos) {
+        ColorTile(pos, unexploredTileColor);
+    }
+
+    public void ColorTile(TileData tile, Color color)
+    {
+        Vector3Int tilePos = Vector3Int.FloorToInt(tile.worldPosition);
+        ColorTile(tilePos, color);
+
+    }
+
+    public void ColorTile(Vector3Int tilePos, Color color) {
+        if (groundTileMap.HasTile(tilePos)) {
+            groundTileMap.SetTileFlags(tilePos, TileFlags.None);
+            groundTileMap.SetColor(tilePos, color);
+        }
     }
 }

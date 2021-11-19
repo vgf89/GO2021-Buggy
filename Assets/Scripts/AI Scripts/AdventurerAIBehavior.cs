@@ -123,7 +123,7 @@ public class AdventurerAIBehavior : MonoBehaviour
             destination = FindClosestUnexploredTile(transform.position);
         }
         
-        navAgent.SetDestination(destination + new Vector3(0.5f, 0.5f, 0));
+        navAgent.SetDestination(destination + new Vector3(NAVAGENTOFFPOSITIONOFFSET, NAVAGENTOFFPOSITIONOFFSET, 0));
         mostEfficientTilePositions.Clear();
         tileDataQueue.Clear();
     }
