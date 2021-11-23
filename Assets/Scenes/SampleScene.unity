@@ -4127,7 +4127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e8d170c66f9f6f4193fb9965901f0de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adventurerTransform: {fileID: 1065306079}
+  adventurerTransform: {fileID: 1647544197}
   cameraArrivalTime: 0.25
   cameraOffset: -10
 --- !u!20 &519420031
@@ -15715,7 +15715,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1549669155}
   - component: {fileID: 1549669154}
-  - component: {fileID: 1549669156}
   m_Layer: 0
   m_Name: MapManager
   m_TagString: Untagged
@@ -15751,13 +15750,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1549669156
+--- !u!1 &1647544195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1647544197}
+  - component: {fileID: 1647544196}
+  - component: {fileID: 1647544198}
+  m_Layer: 0
+  m_Name: The Bug
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1647544196
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1549669153}
+  m_GameObject: {fileID: 1647544195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e9e84059ced2942ae029a73b23ae00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  adventurerTransform: {fileID: 1065306079}
+  isDebugging: 0
+  scrollSpeed: 0.05
+  sendToPastCDTime: 5
+  targetMode: 0
+  wallTileMap: {fileID: 355823981}
+--- !u!4 &1647544197
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647544195}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.716414, y: 0.23791602, z: -4.123033}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1647544198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647544195}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b622471e84795da4d81f7ae96a4eefd9, type: 3}

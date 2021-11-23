@@ -11,11 +11,15 @@ using UnityEngine.Tilemaps;
 public class AdventurerPosAndRotTracker : MonoBehaviour
 {
     //A class that stores a Vector2 position and float rotation
-    class PosAndRot
+    public class PosAndRot
     {
         private Vector3 position;
         private float rotation;
 
+        public PosAndRot()
+        {
+
+        }
         public PosAndRot(Vector3 pos, float rot)
         {
             position = pos;
@@ -105,8 +109,7 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        //Currently not working
-        if (isTracking && drawGizmos)
+        if (isTracking && drawGizmos && savePosAndRotQueue.Count!= 0)
         {
             Gizmos.color = Color.yellow;
             Vector3 trailPosition = new Vector3 (savePosAndRotQueue.Peek().Position.x, savePosAndRotQueue.Peek().Position.y, 0);
@@ -115,4 +118,10 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
         }
     }
 
+    public PosAndRot GetPastPosAndRot()
+    {
+        PosAndRot temp = savePosAndRotQueue.Dequeue();
+        savePosAndRotQueue.Clear();
+        return temp;
+    }
 }
