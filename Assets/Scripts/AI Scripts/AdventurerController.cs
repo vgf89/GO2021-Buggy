@@ -6,8 +6,6 @@ using UnityEngine.Tilemaps;
 
 public class AdventurerController : MonoBehaviour
 {
-    
-
     [SerializeField] 
     private Camera mainCamera;
 
@@ -27,14 +25,17 @@ public class AdventurerController : MonoBehaviour
 
     private Vector3 adventurerDestination;
 
+    [SerializeField]
+    public List<Vector3> discoveredChestPositionList;
+
     [Header("Inspector Debugging")]
     [SerializeField]
     [Tooltip("Will display relevant console information from this script.")]
     private bool isDebugging;
-
     [SerializeField]
     private bool drawGizmo;
-
+    [SerializeField]
+    private bool useMouse;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,8 +51,8 @@ public class AdventurerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (useMouse)
         MouseHandling();
-
         SetExploring();
     }
 
@@ -104,6 +105,18 @@ public class AdventurerController : MonoBehaviour
         }
     }
 
+    public void SaveChestPosition(Transform _transform)
+    {
+        Vector3Int chestPosition = Vector3Int.FloorToInt(_transform.position);
+        chestPosition.z = 0;
+        discoveredChestPositionList.Add(chestPosition);
+        if (isDebugging)
+        {
+            Debug.Log("Chest position saved at: " + chestPosition.ToString());
+        }
+    }
+    
+
     private void OnDrawGizmos()
     {
         if (drawGizmo)
@@ -132,5 +145,7 @@ public class AdventurerController : MonoBehaviour
             }
         }
     }
+
+    
 
 }
