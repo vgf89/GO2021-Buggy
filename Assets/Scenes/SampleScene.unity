@@ -16000,7 +16000,7 @@ GameObject:
   - component: {fileID: 1958845018}
   - component: {fileID: 1958845017}
   m_Layer: 0
-  m_Name: ObjectiveSeekingRadius
+  m_Name: ObjectiveDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
