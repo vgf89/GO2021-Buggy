@@ -33,6 +33,9 @@ public class AdventurerController : MonoBehaviour
     [SerializeField]
     private bool drawGizmo;
 
+    [SerializeField]
+    private bool useMouse;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +51,9 @@ public class AdventurerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MouseHandling();
+
+        if (useMouse)
+            MouseHandling();
 
         SetExploring();
     }

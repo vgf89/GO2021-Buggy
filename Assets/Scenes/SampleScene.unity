@@ -173,6 +173,73 @@ MonoBehaviour:
   soundEffect: 
   loopSound: 0
   adventurerDetector: {fileID: 2104290948}
+--- !u!1 &134061393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 134061394}
+  - component: {fileID: 134061395}
+  - component: {fileID: 134061396}
+  m_Layer: 0
+  m_Name: CameraTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &134061394
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134061393}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4408753, y: 2.8499475, z: -2.9040322}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &134061395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134061393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d55a115f3429533429cdcb64c3e00972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  adventurerTransform: {fileID: 1065306079}
+  isDebugging: 0
+  scrollSpeed: 0.05
+  targetMode: 0
+  wallTileMap: {fileID: 355823981}
+--- !u!114 &134061396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134061393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b622471e84795da4d81f7ae96a4eefd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackingGameObject: {fileID: 1065306075}
+  secondsSaved: 2
+  groundTilemap: {fileID: 1487940465}
+  waitTimer: 0.017
+  drawGizmos: 1
+  isDebugging: 1
 --- !u!1 &275817004
 GameObject:
   m_ObjectHideFlags: 0
@@ -4127,7 +4194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e8d170c66f9f6f4193fb9965901f0de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adventurerTransform: {fileID: 1065306079}
+  adventurerTransform: {fileID: 134061394}
   cameraArrivalTime: 0.25
   cameraOffset: -10
 --- !u!20 &519420031
@@ -4458,7 +4525,8 @@ MonoBehaviour:
   visionRadius: 4
   gameTiles: {fileID: 879592607}
   isDebugging: 0
-  drawGizmo: 1
+  drawGizmo: 0
+  useMouse: 0
 --- !u!195 &1065306077
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4544,7 +4612,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1065306080
 MonoBehaviour:
@@ -4562,7 +4630,7 @@ MonoBehaviour:
   gameTiles: {fileID: 879592607}
   navAgent: {fileID: 0}
   DEPTHMAX: 10
-  isDebugging: 1
+  isDebugging: 0
   behavior: 1
 --- !u!50 &1065306081
 Rigidbody2D:
@@ -15715,7 +15783,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1549669155}
   - component: {fileID: 1549669154}
-  - component: {fileID: 1549669156}
   m_Layer: 0
   m_Name: MapManager
   m_TagString: Untagged
@@ -15749,25 +15816,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1549669156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1549669153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b622471e84795da4d81f7ae96a4eefd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trackingGameObject: {fileID: 1065306075}
-  secondsSaved: 2
-  isDebugging: 0
-  groundTilemap: {fileID: 1487940465}
-  drawGizmos: 0
 --- !u!1 &1796807994
 GameObject:
   m_ObjectHideFlags: 0

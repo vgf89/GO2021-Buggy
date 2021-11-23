@@ -40,16 +40,24 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
     [MinAttribute(0)]
     public int secondsSaved;
 
-    [Tooltip("Will display relevant console information from this script.")]
-    [SerializeField]
-    private bool isDebugging;
+    
     [Tooltip("Place the Tilemap for Ground here.")]
     [SerializeField]
     private Tilemap groundTilemap;
     Queue<PosAndRot> savePosAndRotQueue;
     bool isTracking;
+    
+
+    [Tooltip("How much time that must pass before saving a Pos and Rot.\nUSUALLY SET TO 0.017 TO REPRESENT 1 FRAME MUST PASS BEFORE STORING.")]
+    public float waitTimer = 0.017f;
+    private float timer;
+
     [SerializeField]
     private bool drawGizmos;
+
+    [Tooltip("Will display relevant console information from this script.")]
+    [SerializeField]
+    private bool isDebugging;
 
     // Start is called before the first frame update
     void Awake()
@@ -57,7 +65,6 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
         isTracking = false;
         //Instantiates Queue of PosAndRot objects
         savePosAndRotQueue = new Queue<PosAndRot>();
-       
         isTracking = true;
     }
 
@@ -69,15 +76,17 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
 
     void PosAndRotQueueHandling()
     {
+        timer += Time.deltaTime;
         //If the secondsSaved is greater than 0, find The Adventurer's position and rotation and add it to the savePoseAndRotQueue
-        if (secondsSaved > 0)
+        if (timer > waitTimer)
         {
             Vector3Int currentGridPosition = groundTilemap.WorldToCell(trackingGameObject.transform.position);
             float currentRotation = trackingGameObject.transform.rotation.x;
             SavePositionToQueue(currentGridPosition, currentRotation);
             CheckPosAndRotQueue();
-            
+            timer = 0f;
         }
+        
         
     }
 
@@ -105,14 +114,17 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        //Currently not working
         if (isTracking && drawGizmos)
         {
-            Gizmos.color = Color.yellow;
-            Vector3 trailPosition = new Vector3 (savePosAndRotQueue.Peek().Position.x, savePosAndRotQueue.Peek().Position.y, 0);
+            Gizmos.color = Color.blue;
+            Vector3 trailPosition = new Vector3 (savePosAndRotQueue.Peek().Position.x + 0.5f, savePosAndRotQueue.Peek().Position.y + 0.5f, -0.5f);
             //Vector3 trailPosition = Vector3.zero;
-            Gizmos.DrawWireCube(trailPosition, new Vector3(1, 1, 0));
+            Gizmos.DrawCube(trailPosition, new Vector3(1, 1, 0));
         }
     }
 
+    public PosAndRot GetPastPosAndRot()
+    {
+        return savePosAndRotQueue.Dequeue();
+    }
 }
