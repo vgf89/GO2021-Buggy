@@ -8,7 +8,7 @@ public class GameTiles : MonoBehaviour
     public const string GROUNDTILENAMESTRING = "Ground Tile";
     public const string WALLTILENAMESTRING = "Wall Tile";
 
-
+    [Header("Exploration Algorithm Values")]
     [MinAttribute(0)]
     [Tooltip("The value to add to tileValue if the neighboring tile is a Ground Tile")]
     public float groundTileNeighborValue;
@@ -18,6 +18,7 @@ public class GameTiles : MonoBehaviour
     //Function currently unknown
     public static GameTiles instance;
 
+    [Header("")]
     [Tooltip("Insert the Walkable Ground Tilemap Here")]
     public Tilemap groundTileMap;
     [Tooltip("Insert the Not Walkable Wall Tilemap Here")]
@@ -28,6 +29,7 @@ public class GameTiles : MonoBehaviour
 
     public TileData[,] tilesArray;
 
+    [Header("Inspector Debugging")]
     [Tooltip("Will display relevant console information from this script.")]
     [SerializeField]
     private bool isDebugging;

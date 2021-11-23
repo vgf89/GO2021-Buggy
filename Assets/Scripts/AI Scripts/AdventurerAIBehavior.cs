@@ -26,8 +26,9 @@ public class AdventurerAIBehavior : MonoBehaviour
     [MinAttribute(1)]
     private int DEPTHMAX = 5;
 
-
-    public bool isDebugging;
+    [Header("Inspector Debugging")]
+    [SerializeField]
+    private bool isDebugging;
     public enum behaviors
     {
         DoNothing,

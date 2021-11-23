@@ -4562,7 +4562,7 @@ MonoBehaviour:
   gameTiles: {fileID: 879592607}
   navAgent: {fileID: 0}
   DEPTHMAX: 10
-  isDebugging: 1
+  isDebugging: 0
   behavior: 1
 --- !u!50 &1065306081
 Rigidbody2D:
@@ -15781,11 +15781,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   adventurerTransform: {fileID: 1065306079}
-  isDebugging: 0
   scrollSpeed: 0.05
   sendToPastCDTime: 5
   targetMode: 0
   wallTileMap: {fileID: 355823981}
+  isDebugging: 1
 --- !u!4 &1647544197
 Transform:
   m_ObjectHideFlags: 0
@@ -15814,9 +15814,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trackingGameObject: {fileID: 1065306075}
   secondsSaved: 2
-  isDebugging: 0
   groundTilemap: {fileID: 1487940465}
-  drawGizmos: 0
+  waitTimer: 0.017
+  isDebugging: 0
+  drawGizmos: 1
 --- !u!1 &1796807994
 GameObject:
   m_ObjectHideFlags: 0

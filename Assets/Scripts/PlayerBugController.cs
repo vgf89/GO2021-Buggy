@@ -9,8 +9,7 @@ public class PlayerBugController : MonoBehaviour
     [SerializeField]
     private Transform adventurerTransform;
 
-    [SerializeField]
-    private bool isDebugging;
+    
 
     [Tooltip("The speed which the camera target transform moves.")]
     [MinAttribute(0f)]
@@ -38,6 +37,10 @@ public class PlayerBugController : MonoBehaviour
 
     private Vector3 trackingObjectTransform;
     private AdventurerPosAndRotTracker advPosAndRotTracker;
+
+    [Header("Inspector Debugging")]
+    [SerializeField]
+    private bool isDebugging;
 
     // Start is called before the first frame update
     void Start()
