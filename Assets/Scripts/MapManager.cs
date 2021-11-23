@@ -30,6 +30,13 @@ public class MapManager : MonoBehaviour
         {
             DisplayTileInfo();
         }
+
+        if (Input.GetMouseButtonDown(2))
+        {
+            
+        }
+
+        
     }
 
     //Displays TileData in console
