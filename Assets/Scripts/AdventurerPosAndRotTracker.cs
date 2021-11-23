@@ -10,11 +10,15 @@ using UnityEngine.Tilemaps;
  * */
 public class AdventurerPosAndRotTracker : MonoBehaviour
 {
-    //A class that stores a Vector2 position and float rotation
-    class PosAndRot
+    //A class that stores a Vector3 position and float rotation
+    public class PosAndRot
     {
         private Vector3 position;
         private float rotation;
+
+        public PosAndRot()
+        {
+        }
 
         public PosAndRot(Vector3 pos, float rot)
         {
@@ -78,7 +82,10 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
             CheckPosAndRotQueue();
             
         }
+<<<<<<< Updated upstream
         
+=======
+>>>>>>> Stashed changes
     }
 
     //Receives a Vector3 position relative to the grid and float rotation and that to savePosAndRotQueue
@@ -105,14 +112,33 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
 
     void OnDrawGizmos()
     {
+<<<<<<< Updated upstream
         //Currently not working
         if (isTracking && drawGizmos)
         {
             Gizmos.color = Color.yellow;
             Vector3 trailPosition = new Vector3 (savePosAndRotQueue.Peek().Position.x, savePosAndRotQueue.Peek().Position.y, 0);
+=======
+        if (isTracking && drawGizmos && savePosAndRotQueue.Count != 0)
+        {
+            Gizmos.color = Color.blue;
+            Vector3 trailPosition = new Vector3(savePosAndRotQueue.Peek().Position.x + 0.5f, savePosAndRotQueue.Peek().Position.y + 0.5f, -0.5f);
+>>>>>>> Stashed changes
             //Vector3 trailPosition = Vector3.zero;
             Gizmos.DrawWireCube(trailPosition, new Vector3(1, 1, 0));
         }
+        else
+            Gizmos.color = Color.clear; 
     }
+<<<<<<< Updated upstream
 
+=======
+    
+    public PosAndRot GetPastPosAndRot()
+    {
+        PosAndRot temp = savePosAndRotQueue.Dequeue();
+        savePosAndRotQueue.Clear();
+        return temp;
+    }
+>>>>>>> Stashed changes
 }

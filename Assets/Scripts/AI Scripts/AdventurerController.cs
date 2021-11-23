@@ -27,6 +27,9 @@ public class AdventurerController : MonoBehaviour
 
     private Vector3 adventurerDestination;
 
+    [SerializeField]
+    private bool useMouse;
+
     [Tooltip("Will display relevant console information from this script.")]
     public bool isDebugging;
 
