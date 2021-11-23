@@ -4127,9 +4127,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e8d170c66f9f6f4193fb9965901f0de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 519420031}
   adventurerTransform: {fileID: 1647544197}
-  cameraArrivalTime: 0.25
   cameraOffset: -10
+  cameraArrivalTime: 0.25
+  cameraZoomSpeed: 80
+  cameraMinZoom: 4
+  cameraMaxZoom: 8
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
