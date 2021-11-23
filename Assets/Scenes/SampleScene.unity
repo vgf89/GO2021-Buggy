@@ -173,77 +173,6 @@ MonoBehaviour:
   soundEffect: 
   loopSound: 0
   adventurerDetector: {fileID: 2104290948}
-<<<<<<< Updated upstream
-=======
---- !u!1 &134061393
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 134061394}
-  - component: {fileID: 134061395}
-  - component: {fileID: 134061396}
-  m_Layer: 0
-  m_Name: The Bug
-  m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &134061394
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134061393}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.4408753, y: 2.8499475, z: -2.9040322}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &134061395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134061393}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d55a115f3429533429cdcb64c3e00972, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  adventurerTransform: {fileID: 1065306079}
-  isDebugging: 1
-  scrollSpeed: 0.05
-  sendToPastCDTime: 3
-  targetMode: 0
-  wallTileMap: {fileID: 355823981}
---- !u!114 &134061396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134061393}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b622471e84795da4d81f7ae96a4eefd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trackingGameObject: {fileID: 1065306075}
-  secondsSaved: 2
-  groundTilemap: {fileID: 1487940465}
-  waitTimer: 0.017
-  drawGizmos: 1
-  isDebugging: 0
->>>>>>> Stashed changes
 --- !u!1 &275817004
 GameObject:
   m_ObjectHideFlags: 0
@@ -4528,13 +4457,8 @@ MonoBehaviour:
   map: {fileID: 355823981}
   visionRadius: 4
   gameTiles: {fileID: 879592607}
-  useMouse: 0
   isDebugging: 0
-<<<<<<< Updated upstream
   drawGizmo: 1
-=======
-  drawGizmo: 0
->>>>>>> Stashed changes
 --- !u!195 &1065306077
 NavMeshAgent:
   m_ObjectHideFlags: 0
