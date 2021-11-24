@@ -6,8 +6,6 @@ using UnityEngine.Tilemaps;
 
 public class AdventurerController : MonoBehaviour
 {
-    
-
     [SerializeField] 
     private Camera mainCamera;
 
@@ -27,13 +25,21 @@ public class AdventurerController : MonoBehaviour
 
     private Vector3 adventurerDestination;
 
+    [SerializeField]
+    public List<Vector3> discoveredChestPositionList;
+    public int keysCount;
+    [SerializeField]
+    public List<Vector3> discoveredKeyPositionList;
+
     [Header("Inspector Debugging")]
     [SerializeField]
     [Tooltip("Will display relevant console information from this script.")]
     private bool isDebugging;
-
     [SerializeField]
     private bool drawGizmo;
+    [SerializeField]
+    [Tooltip("Mostly used for Adventurer movement debugging purposes. PLEASE SET THE ADVENTURER AI BEHAVIOR TO 'DO NOTHING'.")]
+    private bool useMouse;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +56,9 @@ public class AdventurerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MouseHandling();
+
+        if (useMouse)
+            MouseHandling();
 
         SetExploring();
     }
@@ -71,6 +79,7 @@ public class AdventurerController : MonoBehaviour
                 Debug.Log("Setting " + transform.name + "'s destination to: " + mouseGridPos.ToString());
             adventurerNavMeshAgent.SetDestination(adventurerDestination);
         }
+        
     }
 
     //Once a tile has been explored, set the neighboring tiles' new value
@@ -104,6 +113,23 @@ public class AdventurerController : MonoBehaviour
         }
     }
 
+    public void SaveItemPosition(Transform itemTransform, string tagName)
+    {
+        Vector3Int itemPosition = Vector3Int.FloorToInt(itemTransform.position);
+        itemPosition.z = 0;
+        if (tagName.Equals("Chest"))
+            discoveredChestPositionList.Add(itemPosition);
+        else if (tagName.Equals("Key"))
+            discoveredKeyPositionList.Add(itemPosition);
+        if (isDebugging)
+        {
+            Debug.Log(tagName + " position saved at: " + itemPosition.ToString());
+        }
+    }
+
+    
+    
+
     private void OnDrawGizmos()
     {
         if (drawGizmo)
@@ -132,5 +158,7 @@ public class AdventurerController : MonoBehaviour
             }
         }
     }
+
+    
 
 }

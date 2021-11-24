@@ -84,7 +84,11 @@ public class PlayerBugController : MonoBehaviour
         transform.position = adventurerTransform.position;
         trackingObjectTransform = transform.position;
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.Space) || 
+            Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) ||
+            Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) ||
+            Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) ||
+            Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
             targetMode = cameraTargetMode.Unlocked;
             if (isDebugging)
@@ -98,9 +102,9 @@ public class PlayerBugController : MonoBehaviour
         Vector3Int cameraTargetGridPos = Vector3Int.FloorToInt(transform.position);
         cameraTargetGridPos.z = 0;
 
-        ArrowKeyInput(cameraTargetGridPos);
+        UnlockedMovementHandlingInput(cameraTargetGridPos);
 
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             targetMode = cameraTargetMode.TrackingAdventuerer;
             if (isDebugging)
@@ -110,47 +114,25 @@ public class PlayerBugController : MonoBehaviour
         transform.position = trackingObjectTransform;
     }
 
-    void ArrowKeyInput(Vector3Int gridPos)
+    void UnlockedMovementHandlingInput(Vector3Int gridPos)
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            if (gridPos.x > wallTileMap.cellBounds.xMin)
-            {
-                trackingObjectTransform.x -= scrollSpeed;
-                if (isDebugging)
-                    Debug.Log(KeyCode.LeftArrow.ToString() + " is being pressed.");
-            }
-        }
+        //Horizontal Input
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            trackingObjectTransform.x -= scrollSpeed;
 
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            if (gridPos.x < wallTileMap.cellBounds.xMax)
-            {
-                trackingObjectTransform.x += scrollSpeed;
-                if (isDebugging)
-                    Debug.Log(KeyCode.RightArrow.ToString() + " is being pressed.");
-            }
-        }
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            trackingObjectTransform.x += scrollSpeed;
 
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            if (gridPos.y > wallTileMap.cellBounds.yMin)
-            {
-                trackingObjectTransform.y -= scrollSpeed;
-                if (isDebugging)
-                    Debug.Log(KeyCode.DownArrow.ToString() + " is being pressed.");
-            }
-        }
+        trackingObjectTransform.x = Mathf.Clamp(trackingObjectTransform.x, wallTileMap.cellBounds.xMin, wallTileMap.cellBounds.xMax);
 
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            if (gridPos.y < wallTileMap.cellBounds.yMax)
-            {
-                trackingObjectTransform.y += scrollSpeed;
-                if (isDebugging)
-                    Debug.Log(KeyCode.UpArrow.ToString() + " is being pressed.");
-            }
-        }
+        //Vertical Input
+        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+            trackingObjectTransform.y -= scrollSpeed;
+
+        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+            trackingObjectTransform.y += scrollSpeed;
+
+        trackingObjectTransform.y = Mathf.Clamp(trackingObjectTransform.y, wallTileMap.cellBounds.yMin, wallTileMap.cellBounds.yMax);
     }
 
     void GlitchHandling()

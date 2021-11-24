@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Adventurer
+  - Chest
+  - Key
   layers:
   - Default
   - TransparentFX
