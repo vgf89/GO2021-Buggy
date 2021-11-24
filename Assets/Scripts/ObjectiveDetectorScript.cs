@@ -25,9 +25,19 @@ public class ObjectiveDetectorScript : MonoBehaviour
         {
             if (!collision.GetComponent<ChestController>().isDiscovered)
             {
-                controller.SaveChestPosition(collision.transform);
+                controller.SaveItemPosition(collision.transform, collision.tag);
                 collision.GetComponent<ChestController>().isDiscovered = true;
             }
         }
+
+        if (collision.CompareTag("Key"))
+        {
+            if (!collision.GetComponent<KeyController>().isDiscovered)
+            {
+                controller.SaveItemPosition(collision.transform, collision.tag);
+                collision.GetComponent<KeyController>().isDiscovered = true;
+            }
+        }
+
     }
 }

@@ -79,12 +79,8 @@ public class AdventurerAIBehavior : MonoBehaviour
                         behavior = behaviors.AllTilesExplored;
                         break;
                     }
-                    var tempTileData = FindCurrentTile();
-                    tempTileData.isVisited = true;
-                    gameTiles.CheckAllTilesIsExplored();
-                    gameTiles.GetAllTileValues();
-                    tileDataQueue.Enqueue(tempTileData);
-                    BFSRecursion(tileDataQueue, 0);
+                    StartThinking();
+                    BFSRecursionExploration(tileDataQueue, 0);
                     FindDestination();
                     behavior = behaviors.Exploring;
                     break;
@@ -103,10 +99,23 @@ public class AdventurerAIBehavior : MonoBehaviour
             case behaviors.AllTilesExplored:
                 navAgent.autoBraking = true;
                 break;
+
+            case behaviors.CompletingObjective:
+
+                break;
         }
 
     }
 
+    //Sets the first steps of adding the Adventurer's current tile to the queue before Doing BFSRecusionExploration
+    public void StartThinking()
+    {
+        var tempTileData = FindCurrentTile();
+        tempTileData.isVisited = true;
+        gameTiles.CheckAllTilesIsExplored();
+        gameTiles.GetAllTileValues();
+        tileDataQueue.Enqueue(tempTileData);
+    }
     void FindDestination()
     {
         Vector3 destination = transform.position;
@@ -216,7 +225,7 @@ public class AdventurerAIBehavior : MonoBehaviour
         Debug.Log("The most efficient route is going to " + efficientDestination + " with an efficiency score of " + tempEfficiencyScore);
     }*/
 
-    void BFSRecursion (Queue<TileData> q, int depthCounter)
+    void BFSRecursionExploration (Queue<TileData> q, int depthCounter)
     {
         //Condition to break the recursive process
         if (q.Count == 0)
@@ -260,7 +269,7 @@ public class AdventurerAIBehavior : MonoBehaviour
         }
         
         
-        BFSRecursion(q, depthCounter);
+        BFSRecursionExploration(q, depthCounter);
     }
 
     //Determines efficiency by the tileValue divided by the movement cost [Depends whether the movement is a diagnoal or straight]]
