@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class KeyController : MonoBehaviour
@@ -23,8 +21,19 @@ public class KeyController : MonoBehaviour
         //If this object collides with the Adventurer, pick up the key for a chest.
         if (collision.gameObject.CompareTag("Adventurer"))
         {
-            collision.gameObject.GetComponent<AdventurerController>().keysCount++;
-            Debug.Log(collision.gameObject.name + " has picked up" + name + ".");
+            AdventurerController tempController = collision.gameObject.GetComponent<AdventurerController>();
+            tempController.keysCount++;
+            Debug.Log(collision.gameObject.name + " has picked up " + name + ".");
+            for (int i = 0; i < tempController.discoveredKeyPositionList.Count; i++)
+            {
+                Vector3Int currentKeyGridPos = Vector3Int.FloorToInt(gameObject.transform.position);
+                currentKeyGridPos.z = 0;
+                if (currentKeyGridPos == tempController.discoveredKeyPositionList[i])
+                {
+                    tempController.discoveredKeyPositionList.RemoveAt(i);
+                    Debug.Log("Key successfully removed from list.");
+                }
+            }
             Destroy(gameObject);
         }
     }

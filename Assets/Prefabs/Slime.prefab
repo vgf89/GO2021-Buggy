@@ -51,7 +51,7 @@ MonoBehaviour:
   StateChanged:
     m_PersistentCalls:
       m_Calls: []
-  debug: 1
+  debug: 0
 --- !u!1 &4715658451706555905
 GameObject:
   m_ObjectHideFlags: 0
