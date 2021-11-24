@@ -10,6 +10,7 @@ public class AdventurerAIBehavior : MonoBehaviour
 {
     private const float NAVAGENTOFFPOSITIONOFFSET = 0.5f;
 
+    public AdventurerController adventurerController;
     [SerializeField]
     private Tilemap groundTileMap;
     [Tooltip("Get the GameTiles Component from Grid")]
@@ -35,7 +36,8 @@ public class AdventurerAIBehavior : MonoBehaviour
         Thinking,
         Exploring, 
         InCombat,
-        CompletingObjective,
+        SeekKey,
+        SeekChest,
         AllTilesExplored
     }
     public behaviors behavior;
@@ -45,6 +47,7 @@ public class AdventurerAIBehavior : MonoBehaviour
     [SerializeField]
     private Queue<TileData> tileDataQueue;
 
+    //This gives the AI time to determine a Destination for the NavAgent before Exploring
     private bool isThinking;
 
     private List<Vector3> mostEfficientTilePositions;
@@ -54,13 +57,15 @@ public class AdventurerAIBehavior : MonoBehaviour
     void Start()
     {
         isThinking = false;
+        
         navAgent = GetComponent<NavMeshAgent>();
         tiles = gameTiles.tiles;
         tileDataQueue = new Queue<TileData>();
         mostEfficientTilePositions = new List<Vector3>();
         if (navAgent != null && isDebugging)
             Debug.Log("navAgent initialized");
-
+        if (adventurerController == null)
+            Debug.LogError("Adventurer Controller has not be set in " + this.GetType().Name);
         
     }
 
@@ -82,7 +87,7 @@ public class AdventurerAIBehavior : MonoBehaviour
                     StartThinking();
                     BFSRecursionExploration(tileDataQueue, 0);
                     FindDestination();
-                    behavior = behaviors.Exploring;
+                    behavior = CheckToSwitchBehaviors(behavior);
                     break;
                 }
                 break;
@@ -92,19 +97,47 @@ public class AdventurerAIBehavior : MonoBehaviour
                 {
                     mostEfficientScore = 0;
                     isThinking = false;
-                    behavior = behaviors.Thinking;
+                    behavior = CheckToSwitchBehaviors(behavior);
                     break;
                 }
                 break;
             case behaviors.AllTilesExplored:
                 navAgent.autoBraking = true;
                 break;
-
-            case behaviors.CompletingObjective:
-
+            case behaviors.SeekKey:
+                isThinking = false;
+                GoToClosestObjective(adventurerController.discoveredKeyPositionList);
+                behavior = CheckToSwitchBehaviors(behavior);
+                break;
+            case behaviors.SeekChest:
+                isThinking = false;
+                GoToClosestObjective(adventurerController.discoveredChestPositionList);
+                behavior = CheckToSwitchBehaviors(behavior);
                 break;
         }
 
+    }
+   
+
+    void GoToClosestObjective (List<Vector3> objectiveList)
+    {
+        List<Vector3> tempObjectiveList = objectiveList;
+        if (tempObjectiveList.Count != 0)
+        {
+            float closestDistanceToChest = Vector3.Distance(transform.position, tempObjectiveList[0]);
+            Vector3 closestObjevtivePosition = tempObjectiveList[0];
+
+            foreach (Vector3 chestPosition in tempObjectiveList)
+            {
+                float tempDistance = Vector3.Distance(transform.position, chestPosition);
+                if (tempDistance < closestDistanceToChest)
+                {
+                    closestDistanceToChest = tempDistance;
+                    closestObjevtivePosition = chestPosition;
+                }
+            }
+            SetAdvNavAgentDestination(closestObjevtivePosition);
+        }
     }
 
     //Sets the first steps of adding the Adventurer's current tile to the queue before Doing BFSRecusionExploration
@@ -132,8 +165,13 @@ public class AdventurerAIBehavior : MonoBehaviour
         {
             destination = FindClosestUnexploredTile(transform.position);
         }
-        
-        navAgent.SetDestination(destination + new Vector3(NAVAGENTOFFPOSITIONOFFSET, NAVAGENTOFFPOSITIONOFFSET, 0));
+
+        SetAdvNavAgentDestination(destination);
+    }
+
+    void SetAdvNavAgentDestination(Vector3 destinationPosition)
+    {
+        navAgent.SetDestination(destinationPosition + new Vector3(NAVAGENTOFFPOSITIONOFFSET, NAVAGENTOFFPOSITIONOFFSET, 0));
         mostEfficientTilePositions.Clear();
         tileDataQueue.Clear();
     }
@@ -321,4 +359,54 @@ public class AdventurerAIBehavior : MonoBehaviour
         return closestPosition;
     }
     
+    //TO DO: CLEAN UP THIS LOGIC
+    behaviors CheckToSwitchBehaviors(behaviors currentBehavior)
+    {
+        int currentKeyCount = adventurerController.keysCount;
+        int currentDiscoveredChestCount = adventurerController.discoveredChestPositionList.Count;
+        int currentDiscoveredKeyCount = adventurerController.discoveredKeyPositionList.Count;
+
+        if (currentBehavior == behaviors.Thinking)
+        {
+            //Prioritizes unlocking chests than seeking keys
+            if (currentKeyCount > 0 && currentDiscoveredChestCount > 0)
+                return behaviors.SeekChest;
+            //If the adventurer knows where the keys are, but doesn't have them Å® pick up a key
+            else if (currentKeyCount < currentDiscoveredKeyCount && currentDiscoveredKeyCount > 0)
+                return behaviors.SeekKey;
+            else
+                return behaviors.Exploring;
+        }
+
+        if (currentBehavior == behaviors.Exploring)
+        {
+            if (!navAgent.hasPath)
+                return behaviors.Thinking;
+        }
+
+        if (currentBehavior == behaviors.SeekKey)
+        {
+            //The moment it picks up a key and no longer knows where the other keys are
+            if (currentDiscoveredKeyCount == 0)
+            {
+                return behaviors.Thinking;
+            }
+            else
+                return behaviors.SeekKey;
+        }
+
+        if (currentBehavior == behaviors.SeekChest)
+        {
+            //If the Adventurer knows where one chest is and has at least one key Å® unlock chest
+            if (currentKeyCount > 0 && currentDiscoveredChestCount > 0)
+            {
+                return behaviors.SeekChest;
+            }
+            else
+                return behaviors.Thinking;
+
+        }
+
+        return currentBehavior;
+    }
 }

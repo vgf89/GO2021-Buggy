@@ -28,7 +28,6 @@ public class ChestController : MonoBehaviour
         {
             chestAnimator.SetBool("Open", true);
             isOpen = true;
-            Debug.Log(chestAnimator.runtimeAnimatorController);
         }
     }
 
@@ -44,12 +43,23 @@ public class ChestController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
-        if(collision.CompareTag("Adventurer"))
+        if(collision.gameObject.CompareTag("Adventurer"))
         {
-            if (collision.GetComponent<AdventurerController>().keysCount > 0)
+            AdventurerController tempController = collision.gameObject.GetComponent<AdventurerController>();
+            if (tempController.keysCount > 0)
             {
+                for (int i = 0 ; i < tempController.discoveredChestPositionList.Count; i++)
+                {
+                    Vector3Int currentChestGridPos = Vector3Int.FloorToInt(gameObject.transform.position);
+                    currentChestGridPos.z = 0;
+                    if (currentChestGridPos == tempController.discoveredChestPositionList[i])
+                    {
+                        tempController.discoveredChestPositionList.RemoveAt(i);
+                        Debug.Log("Chest sucessfully removed from list.");
+                    }
+                }
                 OpenChest();
-                collision.GetComponent<AdventurerController>().keysCount -= 1;
+                tempController.keysCount -= 1;
             }
         }
     }

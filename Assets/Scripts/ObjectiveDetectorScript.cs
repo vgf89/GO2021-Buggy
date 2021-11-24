@@ -6,6 +6,8 @@ public class ObjectiveDetectorScript : MonoBehaviour
 {
     public AdventurerController controller;
 
+    public bool isDebugging;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,11 +22,13 @@ public class ObjectiveDetectorScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(name + " has found " + collision.name);
+        
         if (collision.CompareTag("Chest"))
         {
             if (!collision.GetComponent<ChestController>().isDiscovered)
             {
+                if (isDebugging)
+                    Debug.Log(name + " has newly discovered " + collision.name + " at " + Vector3Int.FloorToInt(collision.transform.position));
                 controller.SaveItemPosition(collision.transform, collision.tag);
                 collision.GetComponent<ChestController>().isDiscovered = true;
             }
@@ -34,6 +38,8 @@ public class ObjectiveDetectorScript : MonoBehaviour
         {
             if (!collision.GetComponent<KeyController>().isDiscovered)
             {
+                if (isDebugging)
+                    Debug.Log(name + " has newly discovered " + collision.name + " at " + Vector3Int.FloorToInt(collision.transform.position));
                 controller.SaveItemPosition(collision.transform, collision.tag);
                 collision.GetComponent<KeyController>().isDiscovered = true;
             }
