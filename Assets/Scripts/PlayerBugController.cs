@@ -149,6 +149,7 @@ public class PlayerBugController : MonoBehaviour
                 adventurerTransform.eulerAngles = sendToPastRotation;
                 if (isDebugging)
                     Debug.Log("Sending Adventurer into the past to " + sendToPastPosition.ToString());
+                adventurerTransform.GetComponent<AdventurerAIBehavior>().RestartThinking();
                 sendToPastTimer = 0;
             }
         }

@@ -141,8 +141,21 @@ public class AdventurerAIBehavior : MonoBehaviour
     }
 
     //Sets the first steps of adding the Adventurer's current tile to the queue before Doing BFSRecusionExploration
-    public void StartThinking()
+    void StartThinking()
     {
+        var tempTileData = FindCurrentTile();
+        tempTileData.isVisited = true;
+        gameTiles.CheckAllTilesIsExplored();
+        gameTiles.GetAllTileValues();
+        tileDataQueue.Enqueue(tempTileData);
+    }
+
+    //This is mostly for when the Adventurer is sent into the past, it resets its train of thought and will think of its route from the position it was reset to.
+    public void RestartThinking()
+    {
+        tileDataQueue.Clear();
+        isThinking = false;
+        behavior = behaviors.Thinking;
         var tempTileData = FindCurrentTile();
         tempTileData.isVisited = true;
         gameTiles.CheckAllTilesIsExplored();
