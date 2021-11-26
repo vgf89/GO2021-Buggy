@@ -77,12 +77,19 @@ public abstract class State : MonoBehaviour
                 animator.StopPlayback();
                 animationFinished = true;
             }
+        } else if (animationSequence.Length == 0) {
+            animationFinished = true;
         }
         return false;
     }
 
     protected bool isAnimationFinished() // Returns 1 when current animation has finished its first loop
     {
-        return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1;
+        if (animationSequence.Length > 0) {
+            animationFinished = animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1;
+        } else {
+            animationFinished = true;
+        }
+        return animationFinished;
     }
 }

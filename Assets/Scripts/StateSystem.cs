@@ -101,7 +101,8 @@ public class StateSystem : MonoBehaviour
         int i = 0;
         var arr = stack.ToArray();
         for (i = arr.Length; i > 0; i--) {
-            logstring += arr[i-1].GetType().Name + "    ";
+            //logstring += arr[i-1].GetType().Name + "    ";
+            logstring += arr[i-1].name + "    ";
             //Debug.Log("\t" + (arr.Length - i) + ": " + arr[i-1].ToString());
         }
         logstring = logstring.Trim();
