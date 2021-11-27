@@ -117,28 +117,7 @@ public class AdventurerAIBehavior : MonoBehaviour
         }
 
     }
-   
 
-    void GoToClosestObjective (List<Vector3> objectiveList)
-    {
-        List<Vector3> tempObjectiveList = objectiveList;
-        if (tempObjectiveList.Count != 0)
-        {
-            float closestDistanceToChest = Vector3.Distance(transform.position, tempObjectiveList[0]);
-            Vector3 closestObjevtivePosition = tempObjectiveList[0];
-
-            foreach (Vector3 chestPosition in tempObjectiveList)
-            {
-                float tempDistance = Vector3.Distance(transform.position, chestPosition);
-                if (tempDistance < closestDistanceToChest)
-                {
-                    closestDistanceToChest = tempDistance;
-                    closestObjevtivePosition = chestPosition;
-                }
-            }
-            SetAdvNavAgentDestination(closestObjevtivePosition);
-        }
-    }
 
     //Sets the first steps of adding the Adventurer's current tile to the queue before Doing BFSRecusionExploration
     void StartThinking()
@@ -162,6 +141,17 @@ public class AdventurerAIBehavior : MonoBehaviour
         gameTiles.GetAllTileValues();
         tileDataQueue.Enqueue(tempTileData);
     }
+
+    #region DestinationHandling
+
+    
+    TileData FindCurrentTile()
+    {
+        Vector3Int currentGridPos = groundTileMap.WorldToCell(transform.position);
+
+        return tiles[currentGridPos];
+    }
+
     void FindDestination()
     {
         Vector3 destination = transform.position;
@@ -189,12 +179,56 @@ public class AdventurerAIBehavior : MonoBehaviour
         tileDataQueue.Clear();
     }
 
+    void GoToClosestObjective(List<Vector3> objectiveList)
+    {
+        List<Vector3> tempObjectiveList = objectiveList;
+        if (tempObjectiveList.Count != 0)
+        {
+            float closestDistanceToChest = Vector3.Distance(transform.position, tempObjectiveList[0]);
+            Vector3 closestObjevtivePosition = tempObjectiveList[0];
+
+            foreach (Vector3 chestPosition in tempObjectiveList)
+            {
+                float tempDistance = Vector3.Distance(transform.position, chestPosition);
+                if (tempDistance < closestDistanceToChest)
+                {
+                    closestDistanceToChest = tempDistance;
+                    closestObjevtivePosition = chestPosition;
+                }
+            }
+            SetAdvNavAgentDestination(closestObjevtivePosition);
+        }
+    }
+
+    //Finds the closest unexplored groundTile
+    Vector3 FindClosestUnexploredTile(Vector3 _currentPosition)
+    {
+        float tempDistance = float.MaxValue;
+        Vector3 closestPosition = _currentPosition;
+
+        foreach (KeyValuePair<Vector3, TileData> tileData in tiles)
+        {
+            Vector3 checkingPosition = tileData.Value.worldPosition;
+            if (tiles[checkingPosition].tileName.Equals(GameTiles.GROUNDTILENAMESTRING) && !tiles[checkingPosition].isExplored
+                && (Vector3.Distance(_currentPosition, checkingPosition) < tempDistance))
+            {
+                tempDistance = Vector3.Distance(_currentPosition, checkingPosition);
+                closestPosition = tileData.Value.worldPosition;
+            }
+        }
+        closestPosition.z = 0f;
+        if (isDebugging)
+            Debug.Log("Finding Closest Unexplored Tile from" + _currentPosition.ToString() + " to " + closestPosition.ToString() + " at a distance of " + tempDistance);
+        return closestPosition;
+    }
+    #endregion
+
     //Make a copy of the Dictionary of tiles
     //What needs to be passed: the <Vector3> current position (hypothetical or real), the depthCounter to check if they have reached the maximum amount of moves
     //What needs to be return: the <Vector3> position with the best score. That positions needs to be set as the destination
     //Check the current state of the board and determine its efficiency
     //If the absolute value difference between the currentTile's position and tile it is checking(which should be one of its neighbor) is greater than 1, the diagonal movecost is Mathf.Sqrt(2 * (Mathf.Pow(movementCost,2))
-   
+
 
     //Hardcopying a tile's TileData
     TileData HardCopyTileData(TileData _tileData)
@@ -213,12 +247,7 @@ public class AdventurerAIBehavior : MonoBehaviour
     }
 
     //Find the tileData based on the current Adventurer's position
-    TileData FindCurrentTile()
-    {
-        Vector3Int currentGridPos = groundTileMap.WorldToCell(transform.position);
 
-        return tiles[currentGridPos];
-    }
 
     /*void DepthSearching(TileData _tileData, int depthCounter)
     {
@@ -234,7 +263,7 @@ public class AdventurerAIBehavior : MonoBehaviour
             DepthSearching(tempTileData, depthCounter + 1);
         }
     }*/
-    
+
     /*    void BFS(TileData src)
     {
         int depthCounter = 0;
@@ -276,7 +305,9 @@ public class AdventurerAIBehavior : MonoBehaviour
         Debug.Log("The most efficient route is going to " + efficientDestination + " with an efficiency score of " + tempEfficiencyScore);
     }*/
 
-    void BFSRecursionExploration (Queue<TileData> q, int depthCounter)
+    #region ExplorationAlgorithm
+
+    void BFSRecursionExploration(Queue<TileData> q, int depthCounter)
     {
         //Condition to break the recursive process
         if (q.Count == 0)
@@ -291,7 +322,7 @@ public class AdventurerAIBehavior : MonoBehaviour
         //Dequeue 
         var groundTileData = q.Dequeue();
         depthCounter++;
-        
+
         //Another condition to break the recursive process
         if (depthCounter > DEPTHMAX)
         {
@@ -314,12 +345,12 @@ public class AdventurerAIBehavior : MonoBehaviour
             {
                 neighborTileData.Value.isVisited = true;
                 q.Enqueue(neighborTileData.Value);
-                if(isDebugging)
+                if (isDebugging)
                     Debug.Log("Tile at " + neighborTileData.Value.worldPosition + "has been enqueued at a depth of [" + depthCounter + "].");
             }
         }
-        
-        
+
+
         BFSRecursionExploration(q, depthCounter);
     }
 
@@ -346,31 +377,9 @@ public class AdventurerAIBehavior : MonoBehaviour
             mostEfficientTilePositions.Add(_tileData.worldPosition);
         }
 
-    }
-
-  
-
-    //Finds the closest unexplored groundTile
-    Vector3 FindClosestUnexploredTile(Vector3 _currentPosition)
-    {
-        float tempDistance = float.MaxValue;
-        Vector3 closestPosition = _currentPosition;
-
-        foreach (KeyValuePair<Vector3, TileData> tileData in tiles)
-        {
-            Vector3 checkingPosition = tileData.Value.worldPosition;
-            if (tiles[checkingPosition].tileName.Equals(GameTiles.GROUNDTILENAMESTRING) && !tiles[checkingPosition].isExplored 
-                && (Vector3.Distance(_currentPosition, checkingPosition) < tempDistance))
-            {
-                tempDistance = Vector3.Distance(_currentPosition, checkingPosition);
-                closestPosition = tileData.Value.worldPosition;
-            }
-        }
-        closestPosition.z = 0f;
-        if (isDebugging)
-            Debug.Log("Finding Closest Unexplored Tile from" + _currentPosition.ToString() + " to " + closestPosition.ToString() + " at a distance of " + tempDistance);
-        return closestPosition;
-    }
+    } 
+    #endregion
+    
     
     //TO DO: CLEAN UP THIS LOGIC
     behaviors CheckToSwitchBehaviors(behaviors currentBehavior)
