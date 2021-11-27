@@ -19,7 +19,9 @@ public class PlayerBugController : MonoBehaviour
     [Tooltip("The time(in seconds) it takes to send the adventurer in the past.")]
     [MinAttribute(0.1f)]
     public float sendToPastCDTime;
-    float sendToPastTimer;
+    public float sendToPastTimer;
+    public float manipulateTimeCDTime;
+    public float manipulateWorldTimer;
 
 
     public enum cameraTargetMode
@@ -38,6 +40,8 @@ public class PlayerBugController : MonoBehaviour
     private Vector3 trackingObjectTransform;
     private AdventurerPosAndRotTracker advPosAndRotTracker;
 
+    private GameWorldSpeedController gWorldController;
+
     [Header("Inspector Debugging")]
     [SerializeField]
     private bool isDebugging;
@@ -49,6 +53,7 @@ public class PlayerBugController : MonoBehaviour
             adventurerTransform = GameObject.Find("Adventurer").transform;
 
         advPosAndRotTracker = GetComponent<AdventurerPosAndRotTracker>();
+        gWorldController = Object.FindObjectOfType<GameWorldSpeedController>();
 
         if (isDebugging)
         {
@@ -60,6 +65,7 @@ public class PlayerBugController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        SetTimers();
         switch (targetMode)
         {
             case cameraTargetMode.DoNothing:
@@ -79,7 +85,12 @@ public class PlayerBugController : MonoBehaviour
             DebugGlitchAbilityTimers();
     }
 
-    
+    private void SetTimers()
+    {
+        sendToPastTimer += Time.deltaTime;
+        manipulateWorldTimer += Time.deltaTime;
+    }
+
 
     private void TrackingAdventurerHandling()
     {
@@ -139,25 +150,15 @@ public class PlayerBugController : MonoBehaviour
 
     void GlitchHandling()
     {
-        sendToPastTimer += Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (sendToPastTimer >= sendToPastCDTime)
-            {
-                AdventurerPosAndRotTracker.PosAndRot tempPosAndRot = SetAdventurerPosAndRot();
-                Vector3 sendToPastPosition = tempPosAndRot.Position;
-                Vector3 sendToPastRotation = new Vector3(tempPosAndRot.Rotation, 0, 0);
-                adventurerTransform.position = sendToPastPosition;
-                adventurerTransform.eulerAngles = sendToPastRotation;
-                if (isDebugging)
-                    Debug.Log("Sending Adventurer into the past to " + sendToPastPosition.ToString());
-                adventurerTransform.GetComponent<AdventurerAIBehavior>().RestartThinking();
-                sendToPastTimer = 0;
-            }
-        }
-    }
+            SendToPast();
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            ManipulateTime();
 
-    public void SendToPast()
+    }
+    #region GlitchPowers
+
+    public bool SendToPast()
     {
         if (sendToPastTimer >= sendToPastCDTime)
         {
@@ -170,8 +171,24 @@ public class PlayerBugController : MonoBehaviour
                 Debug.Log("Sending Adventurer into the past to " + sendToPastPosition.ToString());
             adventurerTransform.GetComponent<AdventurerAIBehavior>().RestartThinking();
             sendToPastTimer = 0;
+            return true;
         }
+        else
+            return false;
     }
+
+    public bool ManipulateTime()
+    {
+        if (manipulateWorldTimer >= manipulateTimeCDTime)
+        {
+            manipulateWorldTimer = 0;
+            gWorldController.changeWorldSpeed();
+            return true;
+        }
+        return false;
+    } 
+
+    #endregion
 
     AdventurerPosAndRotTracker.PosAndRot SetAdventurerPosAndRot()
     {

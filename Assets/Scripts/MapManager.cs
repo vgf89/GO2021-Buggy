@@ -58,9 +58,17 @@ public class MapManager : MonoBehaviour
     void Update()
     {
         MouseHandling();
-
+        CheckPickedUpKeys();
         CheckChestOpen();
         CheckConditionOfTheWorld();
+    }
+
+    //If any keys were picked up and destroyed, remove them from the allKeysList
+    private void CheckPickedUpKeys()
+    {
+        for (int i = 0; i < allKeysList.Count; i++)
+            if (allKeysList[i] == null)
+                allKeysList.RemoveAt(i);
     }
 
     private void MouseHandling()

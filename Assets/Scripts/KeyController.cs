@@ -4,6 +4,7 @@ public class KeyController : MonoBehaviour
 {
     public bool isDiscovered;
 
+    public bool halfSpeed;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,7 +14,10 @@ public class KeyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            //GetComponent<Animator>().speed *= Random.Range(0, 3f);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

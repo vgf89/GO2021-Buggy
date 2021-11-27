@@ -27,16 +27,7 @@ public class FrustrationBarUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            if (timer > waitTime)
-            {
-                SetMinFrustration();
-                timer = 0f;
-            }
-        }
-        //SetFrustration(timer * fillRate);
+        
     }
 
     public void SetFrustration(float frustration)
