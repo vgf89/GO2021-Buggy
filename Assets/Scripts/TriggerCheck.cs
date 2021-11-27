@@ -95,4 +95,10 @@ public class TriggerCheck : MonoBehaviour
     public float distance() {
         return distanceAbs;
     }
+    public GameObject getOther() {
+        if (colliders.Count > 0) {
+            return colliders[0].gameObject;
+        }
+        return null;
+    }
 }
