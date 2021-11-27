@@ -79,6 +79,8 @@ public class PlayerBugController : MonoBehaviour
             DebugGlitchAbilityTimers();
     }
 
+    
+
     private void TrackingAdventurerHandling()
     {
         transform.position = adventurerTransform.position;
@@ -152,6 +154,22 @@ public class PlayerBugController : MonoBehaviour
                 adventurerTransform.GetComponent<AdventurerAIBehavior>().RestartThinking();
                 sendToPastTimer = 0;
             }
+        }
+    }
+
+    public void SendToPast()
+    {
+        if (sendToPastTimer >= sendToPastCDTime)
+        {
+            AdventurerPosAndRotTracker.PosAndRot tempPosAndRot = SetAdventurerPosAndRot();
+            Vector3 sendToPastPosition = tempPosAndRot.Position;
+            Vector3 sendToPastRotation = new Vector3(tempPosAndRot.Rotation, 0, 0);
+            adventurerTransform.position = sendToPastPosition;
+            adventurerTransform.eulerAngles = sendToPastRotation;
+            if (isDebugging)
+                Debug.Log("Sending Adventurer into the past to " + sendToPastPosition.ToString());
+            adventurerTransform.GetComponent<AdventurerAIBehavior>().RestartThinking();
+            sendToPastTimer = 0;
         }
     }
 

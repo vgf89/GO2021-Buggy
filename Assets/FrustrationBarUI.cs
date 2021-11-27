@@ -14,7 +14,7 @@ public class FrustrationBarUI : MonoBehaviour
     public int currentFrustration;
 
     [SerializeField]
-    private Slider fillBar;
+    public Slider fillBar;
 
 
 
@@ -36,7 +36,7 @@ public class FrustrationBarUI : MonoBehaviour
                 timer = 0f;
             }
         }
-        SetFrustration(timer * fillRate);
+        //SetFrustration(timer * fillRate);
     }
 
     public void SetFrustration(float frustration)

@@ -6,18 +6,18 @@ using UnityEngine.UI;
 public class AbilityButton : MonoBehaviour
 {
     public Slider fillBar;
-    public float fillBarMax = 100;
     public float currentFillBar;
 
 
     public float timer;
-    public float fillRate = 5f;
+    public float abiltyCooldownTimer;
 
+    public PlayerBugController playerContoller;
 
     // Start is called before the first frame update
     void Start()
     {
-        fillBar.maxValue = fillBarMax;
+        fillBar.maxValue = abiltyCooldownTimer;
     }
 
     // Update is called once per frame
@@ -25,11 +25,12 @@ public class AbilityButton : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        currentFillBar = timer * fillRate;
-        currentFillBar = Mathf.Clamp(currentFillBar, 0, fillBarMax);
+        currentFillBar = timer;
+        timer = Mathf.Clamp(timer, 0, abiltyCooldownTimer);
         SetFillButton(currentFillBar);
 
-    }
+    } 
+    
 
     public void SetFillButton(float currentFill)
     {
@@ -38,10 +39,15 @@ public class AbilityButton : MonoBehaviour
 
     public void UseAbility()
     {
-        if (currentFillBar >= fillBarMax)
+        if (currentFillBar >= abiltyCooldownTimer)
         {
             Debug.Log("Ability Used");
             timer = 0;
         }
+    }
+
+    public void UseSendBackInTimeAbility ()
+    {
+        playerContoller.SendToPast();
     }
 }
