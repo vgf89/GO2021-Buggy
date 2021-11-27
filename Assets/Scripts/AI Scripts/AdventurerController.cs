@@ -41,7 +41,7 @@ public class AdventurerController : MonoBehaviour
     [Tooltip("Mostly used for Adventurer movement debugging purposes. PLEASE SET THE ADVENTURER AI BEHAVIOR TO 'DO NOTHING'.")]
     private bool useMouse;
 
-    public bool halfSpeed;
+    private float speed;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +53,7 @@ public class AdventurerController : MonoBehaviour
         if (adventurerNavMeshAgent != null && isDebugging)
             Debug.Log("Successfully set NaveMeshAgent from: " + transform.name);
 
+        speed = adventurerNavMeshAgent.speed;
     }
 
     // Update is called once per frame
@@ -64,23 +65,7 @@ public class AdventurerController : MonoBehaviour
 
         SetExploring();
 
-        /*
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            halfSpeed = !halfSpeed;
-            Debug.Log(KeyCode.Alpha2.ToString() + " Has been pressed.");
-            if (halfSpeed)
-            {
-                adventurerNavMeshAgent.speed *= 4;
-                adventurerNavMeshAgent.acceleration *= 4;
-            }
-            else
-            {
-                adventurerNavMeshAgent.speed /= 4;
-                adventurerNavMeshAgent.acceleration /= 4;
-            }
-            
-        }*/
+        adventurerNavMeshAgent.speed = speed * GameWorldSpeedController.worldSpeedMultiplier;
     }
 
 

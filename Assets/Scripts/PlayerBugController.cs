@@ -184,7 +184,7 @@ public class PlayerBugController : MonoBehaviour
         if (manipulateWorldTimer >= manipulateTimeCDTime)
         {
             manipulateWorldTimer = 0;
-            gWorldController.changeWorldSpeed();
+            gWorldController.ChangeWorldSpeed();
             return true;
         }
         return false;

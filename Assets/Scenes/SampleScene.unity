@@ -5844,7 +5844,6 @@ MonoBehaviour:
   isDebugging: 0
   drawGizmo: 0
   useMouse: 0
-  halfSpeed: 0
 --- !u!195 &1065306077
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -6284,9 +6283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f10b674d3c24e4a941aaf8fa56736f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldSpeedMultiplier: 0.33
-  changedSpeed: 0
-  worldNavMeshAgents: []
+  originalWorldSpeed: 1
+  manipulatedWorldSpeed: 0.33
   worldAnimations: []
 --- !u!114 &1360962718
 MonoBehaviour:

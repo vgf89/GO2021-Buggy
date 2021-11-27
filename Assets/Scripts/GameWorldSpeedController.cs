@@ -1,56 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class GameWorldSpeedController : MonoBehaviour
 {
+    [SerializeField]
     [MinAttribute(0f)]
-    public float worldSpeedMultiplier = 0.33f;
-    public bool changedSpeed;
+    public static float worldSpeedMultiplier;
+    public static bool worldSpeedIsChanged;
 
-    [SerializeField] NavMeshAgent[] worldNavMeshAgents;
+    public float originalWorldSpeed = 1;
+    [MinAttribute(0f)]
+    public float manipulatedWorldSpeed = 0.5f;
+
     [SerializeField] Animator[] worldAnimations;
 
     // Start is called before the first frame update
     void Start()
     {
-        worldNavMeshAgents = Object.FindObjectsOfType<NavMeshAgent>();
         worldAnimations = Object.FindObjectsOfType<Animator>();
-        changedSpeed = false;
+        worldSpeedIsChanged = false;
+        worldSpeedMultiplier = originalWorldSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        worldNavMeshAgents = Object.FindObjectsOfType<NavMeshAgent>();
         worldAnimations = Object.FindObjectsOfType<Animator>();
-
     }
 
-    public void changeWorldSpeed()
+    public void ChangeWorldSpeed()
     {
-        changedSpeed = !changedSpeed;
+        worldSpeedIsChanged = !worldSpeedIsChanged;
+
+        if (worldSpeedIsChanged)
+        {
+            worldSpeedMultiplier = manipulatedWorldSpeed;
+        }
+        else
+            worldSpeedMultiplier = originalWorldSpeed;
+
+        ChangeWorldAnimations();
+    }
+
+    void ChangeWorldAnimations()
+    {
         foreach (Animator a in worldAnimations)
         {
-            if (changedSpeed)
-                a.speed *= worldSpeedMultiplier;
-            else
-                a.speed /= worldSpeedMultiplier;
-        }
-        foreach (NavMeshAgent agent in worldNavMeshAgents)
-        {
-            if (changedSpeed)
-            {
-                agent.speed *= worldSpeedMultiplier;
-                agent.acceleration *= worldSpeedMultiplier;
-            }
-            else
-            {
-                agent.speed /= worldSpeedMultiplier;
-                agent.acceleration /= worldSpeedMultiplier;
-            }
+            a.speed = 1 * worldSpeedMultiplier;
         }
     }
 }

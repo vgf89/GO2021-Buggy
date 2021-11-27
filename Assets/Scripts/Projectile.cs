@@ -13,9 +13,8 @@ public class Projectile : MonoBehaviour
     private void Awake()
     {
         //When the object is instantiated, its velocity has changed to the worldSpeed
-        GameWorldSpeedController gameWorldSpeed = Object.FindObjectOfType<GameWorldSpeedController>();
-        if (gameWorldSpeed.changedSpeed)
-            velocity *= gameWorldSpeed.worldSpeedMultiplier;
+        if (GameWorldSpeedController.worldSpeedIsChanged)
+            velocity *= GameWorldSpeedController.worldSpeedMultiplier;
         
     }
 
