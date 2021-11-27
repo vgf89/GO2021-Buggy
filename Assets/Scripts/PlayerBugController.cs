@@ -150,11 +150,13 @@ public class PlayerBugController : MonoBehaviour
 
     void GlitchHandling()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            SendToPast();
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            ManipulateTime();
-
+        if (!PauseMenu.isGamePaused)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+                SendToPast();
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+                ManipulateTime();
+        }
     }
     #region GlitchPowers
 
