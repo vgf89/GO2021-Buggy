@@ -19,17 +19,27 @@ public class BugAbilityButtonController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        ability1.currentFillBar = playerBugController.sendToPastTimer;
+        ability2.currentFillBar = playerBugController.manipulateWorldTimer;
     }
 
     public void SetButtonTimers()
     {
         ability1.abiltyCooldownTimer = playerBugController.sendToPastCDTime;
+        ability2.abiltyCooldownTimer = playerBugController.manipulateTimeCDTime;
     }
 
     public void UseAbility1()
     {
-        playerBugController.SendToPast();
+        if (playerBugController.SendToPast())
+            ability1.UseAbility();
     }
+
+    public void UseAbility2()
+    {
+        if (playerBugController.ManipulateTime())
+            ability2.UseAbility();
+    }
+
 
 }

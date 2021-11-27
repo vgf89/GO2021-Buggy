@@ -10,6 +10,14 @@ public class Projectile : MonoBehaviour
     private float startTime;
     public Vector2 velocity;
 
+    private void Awake()
+    {
+        //When the object is instantiated, its velocity has changed to the worldSpeed
+        if (GameWorldSpeedController.worldSpeedIsChanged)
+            velocity *= GameWorldSpeedController.worldSpeedMultiplier;
+        
+    }
+
     void Start() {
         startTime = Time.time;
     }
@@ -32,4 +40,6 @@ public class Projectile : MonoBehaviour
     void FixedUpdate() {
         rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
+
+    
 }

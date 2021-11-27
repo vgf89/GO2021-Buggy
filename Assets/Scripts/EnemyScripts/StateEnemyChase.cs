@@ -80,7 +80,7 @@ public class StateEnemyChase : State
         navMeshAgent.SetDestination(hit.position);        
 
         //navMeshAgent.SetDestination(destination);
-        navMeshAgent.speed = Mathf.Abs(speed);
+        navMeshAgent.speed = Mathf.Abs(speed * GameWorldSpeedController.worldSpeedMultiplier);
 
         return false;
     }
