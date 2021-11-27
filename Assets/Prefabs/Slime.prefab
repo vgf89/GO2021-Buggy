@@ -558,7 +558,7 @@ MonoBehaviour:
   soundEffect: 
   loopSound: 0
   adventurerDetector: {fileID: 4715658452607398937}
-  idlePatrollingTimeout: 5
+  idlePatrollingTimeout: 3
 --- !u!1 &4715658452874862878
 GameObject:
   m_ObjectHideFlags: 0
