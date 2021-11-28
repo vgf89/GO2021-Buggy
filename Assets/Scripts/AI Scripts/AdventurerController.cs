@@ -31,6 +31,11 @@ public class AdventurerController : MonoBehaviour
     [SerializeField]
     public List<Vector3> discoveredKeyPositionList;
 
+    public List<Transform> enemiesInRange;
+    public float attackCooldown;
+    public int damageValue;
+    float attackTimer;
+
     [Header("Inspector Debugging")]
     [SerializeField]
     [Tooltip("Will display relevant console information from this script.")]
@@ -53,6 +58,7 @@ public class AdventurerController : MonoBehaviour
         if (adventurerNavMeshAgent != null && isDebugging)
             Debug.Log("Successfully set NaveMeshAgent from: " + transform.name);
 
+
         speed = adventurerNavMeshAgent.speed;
     }
 
@@ -64,7 +70,7 @@ public class AdventurerController : MonoBehaviour
             MouseHandling();
 
         SetExploring();
-
+        enemiesInRange = GetComponentInChildren<DetectorScript>().enemyTransforms;
         adventurerNavMeshAgent.speed = speed * GameWorldSpeedController.worldSpeedMultiplier;
     }
 
@@ -132,7 +138,10 @@ public class AdventurerController : MonoBehaviour
         }
     }
 
-    
+    public void Attack()
+    {
+
+    }
     
 
     private void OnDrawGizmos()

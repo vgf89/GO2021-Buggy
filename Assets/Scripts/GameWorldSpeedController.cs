@@ -11,6 +11,8 @@ public class GameWorldSpeedController : MonoBehaviour
     [MinAttribute(0f)]
     public float manipulatedWorldSpeed = 0.5f;
 
+    private float abilityDurationTimer;
+
     [SerializeField] Animator[] worldAnimations;
 
     // Start is called before the first frame update
@@ -25,6 +27,13 @@ public class GameWorldSpeedController : MonoBehaviour
     void Update()
     {
         worldAnimations = Object.FindObjectsOfType<Animator>();
+
+        if (worldSpeedIsChanged)
+            abilityDurationTimer += Time.deltaTime;
+
+        if (abilityDurationTimer > FindObjectOfType<PlayerBugController>().manipulateTimeDuration)
+            ResetWorldSpeed();
+
     }
 
     public void ChangeWorldSpeed()
@@ -47,5 +56,12 @@ public class GameWorldSpeedController : MonoBehaviour
         {
             a.speed = 1 * worldSpeedMultiplier;
         }
+    }
+
+    public void ResetWorldSpeed()
+    {
+        worldSpeedMultiplier = originalWorldSpeed;
+        worldSpeedIsChanged = false;
+        abilityDurationTimer = 0;
     }
 }

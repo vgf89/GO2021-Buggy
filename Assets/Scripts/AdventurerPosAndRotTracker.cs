@@ -42,7 +42,7 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
 
     [Tooltip("How many seconds in the past that wants to be saved.\n MUST BE GREATER THAN 0")]
     [MinAttribute(0)]
-    public int secondsSaved;
+    private int secondsSaved;
 
     
     [Tooltip("Place the Tilemap for Ground here.")]
@@ -69,7 +69,9 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
         isTracking = false;
         //Instantiates Queue of PosAndRot objects
         savePosAndRotQueue = new Queue<PosAndRot>();
-       
+
+        secondsSaved = GetComponent<PlayerBugController>().secondsInPast;
+
         isTracking = true;
     }
 

@@ -27,6 +27,10 @@ public class AdventurerAIBehavior : MonoBehaviour
     [MinAttribute(1)]
     private int DEPTHMAX = 5;
 
+    public DetectorScript detectorScript;
+
+    public int tooManyEnemyThreshold;
+
     [Header("Inspector Debugging")]
     [SerializeField]
     private bool isDebugging;
@@ -49,6 +53,7 @@ public class AdventurerAIBehavior : MonoBehaviour
 
     //This gives the AI time to determine a Destination for the NavAgent before Exploring
     private bool isThinking;
+    private bool isFleeing;
 
     private List<Vector3> mostEfficientTilePositions;
     private float mostEfficientScore;
@@ -62,6 +67,7 @@ public class AdventurerAIBehavior : MonoBehaviour
         tiles = gameTiles.tiles;
         tileDataQueue = new Queue<TileData>();
         mostEfficientTilePositions = new List<Vector3>();
+        detectorScript = GetComponentInChildren<DetectorScript>();
         if (navAgent != null && isDebugging)
             Debug.Log("navAgent initialized");
         if (adventurerController == null)
@@ -75,7 +81,7 @@ public class AdventurerAIBehavior : MonoBehaviour
         switch(behavior)
         {
             case behaviors.Thinking:
-                if (!isThinking)
+                if (!isThinking || isFleeing)
                 {
                     isThinking = true;
                     if (gameTiles.AllTilesExplored())
@@ -98,24 +104,39 @@ public class AdventurerAIBehavior : MonoBehaviour
                     mostEfficientScore = 0;
                     isThinking = false;
                     behavior = CheckToSwitchBehaviors(behavior);
+                    if (detectorScript.enemyTransforms.Count > tooManyEnemyThreshold)
+                        isFleeing = true;
+                    else
+                        isFleeing = false;
                     break;
                 }
                 break;
+
             case behaviors.AllTilesExplored:
                 navAgent.autoBraking = true;
                 break;
+
             case behaviors.SeekKey:
                 isThinking = false;
                 GoToClosestObjective(adventurerController.discoveredKeyPositionList);
                 behavior = CheckToSwitchBehaviors(behavior);
                 break;
+
             case behaviors.SeekChest:
                 isThinking = false;
                 GoToClosestObjective(adventurerController.discoveredChestPositionList);
                 behavior = CheckToSwitchBehaviors(behavior);
                 break;
+
+            case behaviors.InCombat:
+                FindClosestEnemy(detectorScript.enemyTransforms);
+                isThinking = false;
+
+                behavior = CheckToSwitchBehaviors(behavior);
+                break;
         }
 
+        
     }
 
 
@@ -184,19 +205,20 @@ public class AdventurerAIBehavior : MonoBehaviour
         List<Vector3> tempObjectiveList = objectiveList;
         if (tempObjectiveList.Count != 0)
         {
-            float closestDistanceToChest = Vector3.Distance(transform.position, tempObjectiveList[0]);
-            Vector3 closestObjevtivePosition = tempObjectiveList[0];
+            Vector3 closestObjectivePosition = tempObjectiveList[0];
+            float closestDistanceToObjective = Vector3.Distance(transform.position, closestObjectivePosition);
+            
 
             foreach (Vector3 chestPosition in tempObjectiveList)
             {
                 float tempDistance = Vector3.Distance(transform.position, chestPosition);
-                if (tempDistance < closestDistanceToChest)
+                if (tempDistance < closestDistanceToObjective)
                 {
-                    closestDistanceToChest = tempDistance;
-                    closestObjevtivePosition = chestPosition;
+                    closestDistanceToObjective = tempDistance;
+                    closestObjectivePosition = chestPosition;
                 }
             }
-            SetAdvNavAgentDestination(closestObjevtivePosition);
+            SetAdvNavAgentDestination(closestObjectivePosition);
         }
     }
 
@@ -221,6 +243,29 @@ public class AdventurerAIBehavior : MonoBehaviour
             Debug.Log("Finding Closest Unexplored Tile from" + _currentPosition.ToString() + " to " + closestPosition.ToString() + " at a distance of " + tempDistance);
         return closestPosition;
     }
+
+    //Finds the closest enemy in the detection range and goes to that enemy
+    void FindClosestEnemy(List<Transform> transforms)
+    {
+        List<Transform> tempEnemyTransforms = transforms;
+        if(transforms.Count != 0)
+        {
+            Vector3 closestEnemyPosition = tempEnemyTransforms[0].position;
+            float closestDistanceToEnemy = Vector3.Distance(transform.position, closestEnemyPosition);
+
+            foreach(Transform t in tempEnemyTransforms)
+            {
+                float tempDistance = Vector3.Distance(transform.position, t.position);
+                if (tempDistance < closestDistanceToEnemy)
+                {
+                    closestDistanceToEnemy = tempDistance;
+                    closestEnemyPosition = t.position;
+                }
+            }
+            SetAdvNavAgentDestination(closestEnemyPosition);
+        }
+    }
+
     #endregion
 
     //Make a copy of the Dictionary of tiles
@@ -381,7 +426,6 @@ public class AdventurerAIBehavior : MonoBehaviour
     #endregion
     
     
-    //TO DO: CLEAN UP THIS LOGIC
     behaviors CheckToSwitchBehaviors(behaviors currentBehavior)
     {
         int currentKeyCount = adventurerController.keysCount;
@@ -393,8 +437,10 @@ public class AdventurerAIBehavior : MonoBehaviour
             //Prioritizes unlocking chests than seeking keys
             if (currentKeyCount > 0 && currentDiscoveredChestCount > 0)
                 return behaviors.SeekChest;
+            if (detectorScript.enemyTransforms.Count > 0 && !isFleeing)
+                return behaviors.InCombat;
             //If the adventurer knows where the keys are, but doesn't have them Å® pick up a key
-            else if (currentKeyCount < currentDiscoveredKeyCount && currentDiscoveredKeyCount > 0)
+            if (currentKeyCount < currentDiscoveredKeyCount && currentDiscoveredKeyCount > 0)
                 return behaviors.SeekKey;
             else
                 return behaviors.Exploring;
@@ -427,6 +473,14 @@ public class AdventurerAIBehavior : MonoBehaviour
             else
                 return behaviors.Thinking;
 
+        }
+
+        if (currentBehavior == behaviors.InCombat)
+        {
+            if (isFleeing)
+                return behaviors.Thinking;
+            if (detectorScript.enemyTransforms.Count == 0)
+                return behaviors.Thinking;
         }
 
         return currentBehavior;

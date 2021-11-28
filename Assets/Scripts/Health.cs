@@ -16,6 +16,7 @@ public class Health : MonoBehaviour
         if (health < 1) {
             // TODO: Die/respawn, increase frustration stat
             Debug.Log(name + " has 0 HP");
+            Destroy(gameObject);
         }
     }
 }

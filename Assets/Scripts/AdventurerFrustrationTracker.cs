@@ -7,13 +7,18 @@ public class AdventurerFrustrationTracker : MonoBehaviour
 {
     [Header("Frustation Timer")]
     public float maxFrustration;
-    public float currentFrustation;
+    public static float currentFrustation;
     [MinAttribute(1)]
     public float decreasingFillRate;
 
     public FrustrationBarUI frustrationUI;
 
     private float decreasingTimer;
+    private float increasingFillRate;
+    private float increasingFillRateTimer;
+    private float increasingFillRateDuration;
+    private bool isFilling;
+    //private float timer;
 
     // Start is called before the first frame update
     void Start()
@@ -24,19 +29,41 @@ public class AdventurerFrustrationTracker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentFrustation = Mathf.Clamp(currentFrustation, 0, maxFrustration);
+        FillBarHandling();
 
-
-        currentFrustation -= Time.deltaTime * decreasingFillRate;
-        frustrationUI.SetFrustration(currentFrustation);
-
-        if (Input.GetKeyDown(KeyCode.T))
-            AddFrustration(10);
     }
 
-    public void AddFrustration (float value)
+    private void FillBarHandling()
+    {
+        currentFrustation = Mathf.Clamp(currentFrustation, 0, maxFrustration);
+
+        if (isFilling)
+        {
+            increasingFillRateTimer += Time.deltaTime;
+            if (increasingFillRateTimer > increasingFillRateDuration)
+            {
+                increasingFillRate = 0;
+                increasingFillRateTimer = 0;
+                isFilling = false;
+            }
+        }
+
+        currentFrustation += Time.deltaTime * ((-decreasingFillRate) + increasingFillRate);
+        frustrationUI.SetFrustration(currentFrustation);
+    }
+
+    public void AddFrustrationFlat (float value)
     {
         currentFrustation += value;
         frustrationUI.SetFrustration(currentFrustation);
     }
+
+    public void AddFrustrationRate (float rate, float seconds)
+    {
+        increasingFillRate = rate;
+        increasingFillRateDuration = seconds;
+        increasingFillRateTimer = 0;
+        isFilling = true;
+    }
+
 }

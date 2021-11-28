@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectiveDetectorScript : MonoBehaviour
+public class DetectorScript : MonoBehaviour
 {
     public AdventurerController controller;
 
     public bool isDebugging;
+
+    public List<Transform> enemyTransforms;
 
     // Start is called before the first frame update
     void Start()
@@ -45,5 +47,19 @@ public class ObjectiveDetectorScript : MonoBehaviour
             }
         }
 
+        if (collision.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
+        {
+            enemyTransforms.Add(collision.transform);
+        }
+        
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer.Equals(LayerMask.NameToLayer("Enemy")))
+        {
+            enemyTransforms.Remove(collision.transform);
+        }
     }
 }
