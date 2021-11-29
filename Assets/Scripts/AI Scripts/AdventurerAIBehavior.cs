@@ -113,7 +113,8 @@ public class AdventurerAIBehavior : MonoBehaviour
                 break;
 
             case behaviors.AllTilesExplored:
-                navAgent.autoBraking = true;
+                //navAgent.autoBraking = true;
+                behavior = CheckToSwitchBehaviors(behavior);
                 break;
 
             case behaviors.SeekKey:
@@ -483,6 +484,14 @@ public class AdventurerAIBehavior : MonoBehaviour
                 return behaviors.Thinking;
         }
 
+        //If all tiles have been explored, if The Adventurer has a key, open a chest. Else pick up a key.
+        if (currentBehavior == behaviors.AllTilesExplored)
+        {
+            if (currentKeyCount > 0)
+                return behaviors.SeekChest;
+            else
+                return behaviors.SeekKey;
+        }
         return currentBehavior;
     }
 }

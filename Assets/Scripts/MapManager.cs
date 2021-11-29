@@ -135,4 +135,10 @@ public class MapManager : MonoBehaviour
         }
         return count;
     }
+
+    //TO DO: Create failsafe once All tiles have been explored
+    public List<Vector3> GetNotOpenedChestPosition ()
+    {
+        return null;
+    }
 }
