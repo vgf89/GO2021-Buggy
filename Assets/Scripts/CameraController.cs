@@ -54,6 +54,6 @@ public class CameraController : MonoBehaviour
             currentZoom += cameraZoomSpeed * Time.deltaTime;
 
         currentZoom = Mathf.Clamp(currentZoom, cameraMinZoom, cameraMaxZoom);
-        camera.orthographicSize = currentZoom;
+        camera.orthographicSize = Mathf.Pow(currentZoom, 2);
     }
 }
