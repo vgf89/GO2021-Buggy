@@ -35,6 +35,8 @@ public class MapManager : MonoBehaviour
     public conditionsOfTheWoeld condition;
 
 
+    public bool displayTileDataToConsole;
+
     void Awake()
     {
         if (gameTiles == null)
@@ -57,10 +59,12 @@ public class MapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MouseHandling();
+        
         CheckPickedUpKeys();
         CheckChestOpen();
         CheckConditionOfTheWorld();
+        if (displayTileDataToConsole)
+            MouseHandling();
     }
 
     //If any keys were picked up and destroyed, remove them from the allKeysList
