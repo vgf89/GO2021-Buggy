@@ -7,6 +7,7 @@ public class AdventureAttack : MonoBehaviour
     public AdventurerController adventurerController;
     private float attackTimer;
     [SerializeField]List<Transform> inRangeEnemies;
+    [SerializeField] Animator animator;
 
     public GameObject meleeAttackBurst;
 
@@ -57,6 +58,7 @@ public class AdventureAttack : MonoBehaviour
         else
         {
             Instantiate(meleeAttackBurst, _go.transform.position, Quaternion.identity);
+            animator.SetTrigger("Attack");
         }
         if (isDebugging)
             Debug.Log("Attacking " + _go.name );

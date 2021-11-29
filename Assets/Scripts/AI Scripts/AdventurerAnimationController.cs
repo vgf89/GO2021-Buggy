@@ -5,14 +5,13 @@ using UnityEngine.AI;
 
 public class AdventurerAnimationController : MonoBehaviour
 {
-    public Animator animator;
-    public NavMeshAgent navMeshAgent;
+    private Animator animator;
+    [SerializeField] private NavMeshAgent navMeshAgent;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
