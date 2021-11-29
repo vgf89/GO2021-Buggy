@@ -51,7 +51,7 @@ MonoBehaviour:
   StateChanged:
     m_PersistentCalls:
       m_Calls: []
-  debug: 0
+  debug: 1
 --- !u!1 &4715658451706555905
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,7 +286,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.4
+  m_Radius: 0.3
 --- !u!195 &4715658452119533740
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -296,7 +296,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 4715658452119533745}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.3
   m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
@@ -333,8 +333,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd045172c642d44cbc344d40874c891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 5
+  startingHealth: 10
   health: 0
+  soundEffect: slimehurt
 --- !u!1 &4715658452447079488
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +383,7 @@ MonoBehaviour:
   animationSequence:
   - Attack
   loopMode: 2
-  soundEffect: 
+  soundEffect: slimeattack
   loopSound: 0
   adventurerDetector: {fileID: 4715658452607398937}
 --- !u!1 &4715658452607398943

@@ -17,6 +17,7 @@ public class LevelController : MonoBehaviour
 
     private void Awake()
     {
+        SceneFunctions.LoadSceneAdditiveNoDuplicates("Scenes/_preload"); // Load AudioManager and other persistent things
         mapManager = FindObjectOfType<MapManager>();
         frustrationBarUI = FindObjectOfType<FrustrationBarUI>();
         if (Time.timeScale > 0) {
@@ -30,10 +31,12 @@ public class LevelController : MonoBehaviour
     {
         if (mapManager.condition == MapManager.conditionsOfTheWoeld.AllChestsHaveBeenOpened) {
             loseScreen.SetActive(true);
+            AudioManager.PlaySFX("lose");
             Time.timeScale = 0;
         }
         else if (AdventurerFrustrationTracker.currentFrustation >= frustrationBarUI.maxFrustration) {
             winScreen.SetActive(true);
+            AudioManager.PlaySFX("win");
             Time.timeScale = 0;
         }
     }

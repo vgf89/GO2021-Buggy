@@ -104,6 +104,12 @@ public class AudioManager : MonoBehaviour
     // If sound effect wasn't played, return true
     public bool PlaySFXInternal(string name, bool loop = false, float volume = 1f, float pitch = 1f, float panStereo = 0f, float spatialBlend = 0f, float reverbZoneMix = 1f)
     {
+        if (name == null || name == "" || !soundDict.ContainsKey(name))
+        {
+            Debug.Log("Audiomanager: sound not found: \"" + name + "\"");
+            return true;
+        }
+
         Sound s = soundDict[name];
         if (s == null) {
             return true;

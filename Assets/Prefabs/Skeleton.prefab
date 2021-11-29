@@ -496,6 +496,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 5
   health: 0
+  soundEffect: skeletonhurt
 --- !u!1 &3219663882895695785
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,7 +544,7 @@ MonoBehaviour:
   animationSequence:
   - Attack
   loopMode: 0
-  soundEffect: 
+  soundEffect: skeletonattack
   loopSound: 0
   adventurerDetector: {fileID: 3219663883324180464}
   projectile: {fileID: 1238154565918878748, guid: a92fc33ac81a5c4489578686d2108aba, type: 3}

@@ -28,6 +28,7 @@ public class ChestController : MonoBehaviour
         {
             chestAnimator.SetBool("Open", true);
             isOpen = true;
+            AudioManager.PlaySFX("chest");
         }
     }
 

@@ -38,6 +38,7 @@ public class KeyController : MonoBehaviour
                     Debug.Log("Key successfully removed from list.");
                 }
             }
+            AudioManager.PlaySFX("pickup");
             Destroy(gameObject);
         }
     }

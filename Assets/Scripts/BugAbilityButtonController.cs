@@ -31,15 +31,16 @@ public class BugAbilityButtonController : MonoBehaviour
 
     public void UseAbility1()
     {
-        if (playerBugController.SendToPast())
+        if (playerBugController.SendToPast()) {
             ability1.UseAbility();
+        }
     }
 
     public void UseAbility2()
     {
-        if (playerBugController.ManipulateTime())
+        if (playerBugController.ManipulateTime()) {
             ability2.UseAbility();
+        }
     }
-
 
 }
