@@ -23,6 +23,7 @@ public class PlayerBugController : MonoBehaviour
     [MinAttribute(1)]
     public int secondsInPast;
     public float sendToPastTimer;
+
     [Tooltip("The cooldown(in seconds) it takes to manipulate the world speed.")]
     [MinAttribute(0.1f)]
     public float manipulateTimeCDTime;
@@ -30,6 +31,13 @@ public class PlayerBugController : MonoBehaviour
     [MinAttribute(0.1f)]
     public float manipulateTimeDuration;
     public float manipulateWorldTimer;
+
+    public bool isChoosingSpawner;
+    [Tooltip("The cooldown(in seconds) it takes to affect a spawner.")]
+    [MinAttribute(0.1f)]
+    public float affectSpawnerCDTime;
+    public float affectSpawnerTimer;
+    public int affectedSpawnCountRandomMax;
 
     [Header("Frustration Values")]
     public int sentToPastFrustrationFlat;
@@ -106,8 +114,13 @@ public class PlayerBugController : MonoBehaviour
 
     private void SetTimers()
     {
+        sendToPastTimer = Mathf.Clamp(sendToPastTimer, 0, sendToPastCDTime);
+        manipulateWorldTimer = Mathf.Clamp(manipulateWorldTimer, 0, manipulateTimeCDTime);
+        affectSpawnerTimer = Mathf.Clamp(affectSpawnerTimer, 0, affectSpawnerCDTime); 
+
         sendToPastTimer += Time.deltaTime;
         manipulateWorldTimer += Time.deltaTime;
+        affectSpawnerTimer += Time.deltaTime;
     }
 
 
@@ -175,6 +188,14 @@ public class PlayerBugController : MonoBehaviour
                 SendToPast();
             if (Input.GetKeyDown(KeyCode.Alpha2))
                 ManipulateTime();
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+                isChoosingSpawner = true;
+                
+            if (isChoosingSpawner)
+            {
+                GetComponent<BugAbilityButtonController>().ability3.SetButtonText("Select a Spawner");
+                AffectSpawner();
+            }
         }
     }
     #region GlitchPowers
@@ -212,6 +233,29 @@ public class PlayerBugController : MonoBehaviour
         return false;
     } 
 
+    public bool AffectSpawner()
+    {
+        if (affectSpawnerTimer >= affectSpawnerCDTime)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+                if (hit.collider != null)//If spawner was clicked
+                    if (hit.transform.name.Contains("Spawner"))
+                    {
+                        int randomSpawnCount = Random.Range(2, affectedSpawnCountRandomMax + 1);
+                        hit.transform.GetComponent<Spawner>().AffectedSpawnGlitch(randomSpawnCount);
+                        affectSpawnerTimer = 0;
+                        return true;
+                    }
+                GetComponent<BugAbilityButtonController>().ability3.SetButtonText("Spawn More Enemies");
+                isChoosingSpawner = false;
+            }
+        }
+        return false;
+    }
+
+
     #endregion
 
     AdventurerPosAndRotTracker.PosAndRot SetAdventurerPosAndRot()
@@ -224,6 +268,8 @@ public class PlayerBugController : MonoBehaviour
         if (sendToPastTimer >= sendToPastCDTime)
             Debug.Log("Send Adventurer into the past is ready");
         if (manipulateWorldTimer >= manipulateTimeCDTime)
-            Debug.Log("Send Adventurer into the past is ready");
+            Debug.Log("Lag Glitch is ready");
+        if (affectSpawnerTimer >= affectSpawnerCDTime)
+            Debug.Log("Affect Spawner is ready");
     }
 }

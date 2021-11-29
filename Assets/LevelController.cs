@@ -29,12 +29,12 @@ public class LevelController : MonoBehaviour
     
     private void Update()
     {
-        if (mapManager.condition == MapManager.conditionsOfTheWoeld.AllChestsHaveBeenOpened) {
+        if (!loseScreen.activeSelf && mapManager.condition == MapManager.conditionsOfTheWoeld.AllChestsHaveBeenOpened) {
             loseScreen.SetActive(true);
             AudioManager.PlaySFX("lose");
             Time.timeScale = 0;
         }
-        else if (AdventurerFrustrationTracker.currentFrustation >= frustrationBarUI.maxFrustration) {
+        else if (!winScreen.activeSelf && AdventurerFrustrationTracker.currentFrustation >= frustrationBarUI.maxFrustration) {
             winScreen.SetActive(true);
             AudioManager.PlaySFX("win");
             Time.timeScale = 0;
