@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6469129463879302506}
   - component: {fileID: 6469129463879302504}
   - component: {fileID: 6469129463879302519}
+  - component: {fileID: 8703748810107770910}
   m_Layer: 7
   m_Name: Spawner
   m_TagString: Untagged
@@ -48,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawn: {fileID: 4715658452119533745, guid: 47475043046317740b6f2433664c3a01, type: 3}
   entitiesParent: {fileID: 0}
+  maxSpawns: 10
   spawnDelay: 5
   maximumAdventurerDistance: 10
 --- !u!212 &6469129463879302506
@@ -131,3 +133,24 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.4
+--- !u!50 &8703748810107770910
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6469129463879302508}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
