@@ -29,13 +29,6 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     [MinAttribute(1.0f)]
     private float cameraMaxZoom = 6f;
-    private float currentZoom;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        currentZoom = camera.orthographicSize;
-    }
 
     // Update is called once per frame
     void Update()
@@ -47,6 +40,7 @@ public class CameraController : MonoBehaviour
 
     void HandleCameraZoom()
     {
+        float currentZoom = Mathf.Pow(camera.orthographicSize, 1f/2f);
         if (Input.mouseScrollDelta.y > 0)
             currentZoom -= cameraZoomSpeed * Time.deltaTime;
 
