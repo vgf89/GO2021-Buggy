@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class AbilityButton : MonoBehaviour
 {
@@ -9,11 +10,16 @@ public class AbilityButton : MonoBehaviour
     public float currentFillBar;
     public float abiltyCooldownTimer;
     public PlayerBugController playerContoller;
+    [SerializeField] private TextMeshProUGUI text;
 
     // Start is called before the first frame update
     void Start()
     {
+        //fillBar = GetComponentInChildren<Slider>();
         fillBar.maxValue = abiltyCooldownTimer;
+        text = GetComponentInChildren<TextMeshProUGUI>();
+        if (text == null)
+            Debug.LogError(name + " could find text.");
     }
 
     // Update is called once per frame
@@ -37,6 +43,11 @@ public class AbilityButton : MonoBehaviour
             fillBar.value = 0;
             currentFillBar = 0;
         }
+    }
+
+    public void SetButtonText(string s)
+    {
+        text.text = s;
     }
 
 }

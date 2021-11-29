@@ -26,4 +26,14 @@ public class Spawner : MonoBehaviour
             spawnCount++;
         }
     }
+
+    //Referenced from the PlayerBugController as a glitch
+    public void AffectedSpawnGlitch(int _spawnCount)
+    {
+        for (int i = 0; i < _spawnCount; i++)
+        {
+            GameObject newObject = Instantiate(spawn, entitiesParent.transform);
+            newObject.transform.position = transform.position;
+        }
+    }
 }

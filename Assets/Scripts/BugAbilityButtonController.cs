@@ -9,24 +9,32 @@ public class BugAbilityButtonController : MonoBehaviour
 
     public AbilityButton ability1, ability2, ability3, ability4, ability5;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         playerBugController = GetComponent<PlayerBugController>();
-        SetButtonTimers();
+        SetButtonCDTimers();
     }
 
     // Update is called once per frame
     void Update()
     {
-        ability1.currentFillBar = playerBugController.sendToPastTimer;
-        ability2.currentFillBar = playerBugController.manipulateWorldTimer;
+        SetButtonFullBars();
     }
 
-    public void SetButtonTimers()
+    public void SetButtonCDTimers()
     {
         ability1.abiltyCooldownTimer = playerBugController.sendToPastCDTime;
         ability2.abiltyCooldownTimer = playerBugController.manipulateTimeCDTime;
+        ability3.abiltyCooldownTimer = playerBugController.affectSpawnerCDTime;
+        ability4.abiltyCooldownTimer = 1;
+        ability5.abiltyCooldownTimer = 1;
+    }
+
+    public void SetButtonFullBars()
+    {
+        ability1.currentFillBar = playerBugController.sendToPastTimer;
+        ability2.currentFillBar = playerBugController.manipulateWorldTimer;
+        ability3.currentFillBar = playerBugController.affectSpawnerTimer;
     }
 
     public void UseAbility1()
@@ -41,5 +49,14 @@ public class BugAbilityButtonController : MonoBehaviour
             ability2.UseAbility();
     }
 
-
+    public void UseAbility3()
+    {
+        if (ability3.currentFillBar >= ability3.abiltyCooldownTimer)
+        {
+            //ability3.SetButtonText("Select Spawner");
+            playerBugController.isChoosingSpawner = true;
+        }
+        /*if (playerBugController.AffectSpawner())
+            ability3.UseAbility();*/
+    }
 }

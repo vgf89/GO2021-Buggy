@@ -921,6 +921,7 @@ MonoBehaviour:
   currentFillBar: 0
   abiltyCooldownTimer: 0
   playerContoller: {fileID: 0}
+  text: {fileID: 0}
 --- !u!114 &272238248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4986,6 +4987,7 @@ MonoBehaviour:
   currentFillBar: 0
   abiltyCooldownTimer: 0
   playerContoller: {fileID: 0}
+  text: {fileID: 0}
 --- !u!114 &429595300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5030,16 +5032,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 429595299}
-        m_TargetAssemblyTypeName: AbilityButton, Assembly-CSharp
-        m_MethodName: UseAbility
+      - m_Target: {fileID: 1647544199}
+        m_TargetAssemblyTypeName: BugAbilityButtonController, Assembly-CSharp
+        m_MethodName: UseAbility3
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Select a spawner
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &429595301
@@ -5137,7 +5139,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ability 3
+  m_text: Spawn More Enemies
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7613,6 +7615,7 @@ MonoBehaviour:
   currentFillBar: 0
   abiltyCooldownTimer: 0
   playerContoller: {fileID: 0}
+  text: {fileID: 0}
 --- !u!114 &1367562784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19306,6 +19309,10 @@ MonoBehaviour:
   manipulateTimeCDTime: 3
   manipulateTimeDuration: 1.5
   manipulateWorldTimer: 0
+  isChoosingSpawner: 0
+  affectSpawnerCDTime: 5
+  affectSpawnerTimer: 0
+  affectedSpawnCountRandomMax: 12
   sentToPastFrustrationFlat: 20
   timeManipulationFrustrationRate: 15
   targetMode: 0
@@ -19511,6 +19518,7 @@ MonoBehaviour:
   currentFillBar: 0
   abiltyCooldownTimer: 0
   playerContoller: {fileID: 1647544196}
+  text: {fileID: 0}
 --- !u!1 &1671428458
 GameObject:
   m_ObjectHideFlags: 0
@@ -19765,6 +19773,7 @@ MonoBehaviour:
   currentFillBar: 0
   abiltyCooldownTimer: 0
   playerContoller: {fileID: 0}
+  text: {fileID: 0}
 --- !u!114 &1780113733
 MonoBehaviour:
   m_ObjectHideFlags: 0
