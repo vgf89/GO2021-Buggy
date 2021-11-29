@@ -16,13 +16,25 @@ public class PlayerBugController : MonoBehaviour
     public float scrollSpeed;
 
     [Header("Cooldown Timers")]
-    [Tooltip("The time(in seconds) it takes to send the adventurer in the past.")]
+    [Tooltip("The cooldown(in seconds) it takes to send the adventurer in the past.")]
     [MinAttribute(0.1f)]
     public float sendToPastCDTime;
+    [Tooltip("How many seconds in the past the Adventurer will be sent.")]
+    [MinAttribute(1)]
+    public int secondsInPast;
     public float sendToPastTimer;
+    [Tooltip("The cooldown(in seconds) it takes to manipulate the world speed.")]
+    [MinAttribute(0.1f)]
     public float manipulateTimeCDTime;
+    [Tooltip("The duration(in seconds) of manipulate the world speed glitch.")]
+    [MinAttribute(0.1f)]
+    public float manipulateTimeDuration;
     public float manipulateWorldTimer;
 
+    [Header("Frustration Values")]
+    public int sentToPastFrustrationFlat;
+    [Tooltip("This rate is relative to the duration of the Manipulate World Speed Glitch")]
+    public float timeManipulationFrustrationRate;
 
     public enum cameraTargetMode
     {
@@ -42,6 +54,8 @@ public class PlayerBugController : MonoBehaviour
 
     private GameWorldSpeedController gWorldController;
 
+    private AdventurerFrustrationTracker frustrationTracker;
+
     [Header("Inspector Debugging")]
     [SerializeField]
     private bool isDebugging;
@@ -54,12 +68,17 @@ public class PlayerBugController : MonoBehaviour
 
         advPosAndRotTracker = GetComponent<AdventurerPosAndRotTracker>();
         gWorldController = Object.FindObjectOfType<GameWorldSpeedController>();
+        frustrationTracker = Object.FindObjectOfType<AdventurerFrustrationTracker>();
 
         if (isDebugging)
         {
             Debug.Log("Adventurer Transform has been set: " + (adventurerTransform != null) + " to " + this.name);
             Debug.Log("Wall Tile Map has been set: " + (wallTileMap != null) + " to " + this.name);
         }
+
+        if (manipulateTimeDuration > manipulateTimeCDTime)
+            Debug.LogError("Please make the manipulateTimeCDTime longer than the manipulateTimeDuration");
+
     }
 
     // Update is called once per frame
@@ -172,6 +191,8 @@ public class PlayerBugController : MonoBehaviour
             if (isDebugging)
                 Debug.Log("Sending Adventurer into the past to " + sendToPastPosition.ToString());
             adventurerTransform.GetComponent<AdventurerAIBehavior>().RestartThinking();
+            //Add frustrationi
+            frustrationTracker.AddFrustrationFlat(sentToPastFrustrationFlat);
             sendToPastTimer = 0;
             return true;
         }
@@ -183,8 +204,9 @@ public class PlayerBugController : MonoBehaviour
     {
         if (manipulateWorldTimer >= manipulateTimeCDTime)
         {
-            manipulateWorldTimer = 0;
             gWorldController.ChangeWorldSpeed();
+            frustrationTracker.AddFrustrationRate(timeManipulationFrustrationRate, manipulateTimeDuration);
+            manipulateWorldTimer = 0;
             return true;
         }
         return false;
@@ -200,6 +222,8 @@ public class PlayerBugController : MonoBehaviour
     void DebugGlitchAbilityTimers()
     {
         if (sendToPastTimer >= sendToPastCDTime)
+            Debug.Log("Send Adventurer into the past is ready");
+        if (manipulateWorldTimer >= manipulateTimeCDTime)
             Debug.Log("Send Adventurer into the past is ready");
     }
 }

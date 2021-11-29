@@ -25,13 +25,13 @@ public class MainMenuController : MonoBehaviour
 
     public void PlayGame()
     {
-        StartCoroutine("LoadAsyncScene");
+        StartCoroutine("LoadAsyncScene", "SampleScene");
     }
 
-    IEnumerator LoadAsyncScene()
+    IEnumerator LoadAsyncScene(string _sceneName)
     {
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("SampleScene");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_sceneName);
 
         while (!asyncLoad.isDone)
             yield return null;

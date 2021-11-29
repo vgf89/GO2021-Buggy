@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -47,4 +48,19 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         isGamePaused = true;
     }
+
+    public void GoToMainMenu()
+    {
+        StartCoroutine("LoadAsyncScene", "TitleScreen");
+    }
+
+    IEnumerator LoadAsyncScene(string _sceneName)
+    {
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_sceneName);
+
+        while (!asyncLoad.isDone)
+            yield return null;
+    }
+
 }
