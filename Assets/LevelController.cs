@@ -32,7 +32,7 @@ public class LevelController : MonoBehaviour
             loseScreen.SetActive(true);
             Time.timeScale = 0;
         }
-        else if (frustrationBarUI.currentFrustration >= frustrationBarUI.maxFrustration) {
+        else if (AdventurerFrustrationTracker.currentFrustation >= frustrationBarUI.maxFrustration) {
             winScreen.SetActive(true);
             Time.timeScale = 0;
         }

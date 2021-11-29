@@ -10,8 +10,8 @@ public class FrustrationBarUI : MonoBehaviour
     public float fillRate = 5f;
 
 
-    public int maxFrustration = 100;
-    public int currentFrustration;
+    public float maxFrustration = 100;
+    //public float currentFrustration;
 
     [SerializeField]
     public Slider fillBar;
