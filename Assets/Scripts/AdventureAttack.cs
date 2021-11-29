@@ -59,6 +59,7 @@ public class AdventureAttack : MonoBehaviour
         {
             Instantiate(meleeAttackBurst, _go.transform.position, Quaternion.identity);
             animator.SetTrigger("Attack");
+            AudioManager.PlaySFX("playerattack");
         }
         if (isDebugging)
             Debug.Log("Attacking " + _go.name );
