@@ -6981,6 +6981,7 @@ GameObject:
   - component: {fileID: 1065306083}
   - component: {fileID: 1065306082}
   - component: {fileID: 1065306084}
+  - component: {fileID: 1065306078}
   m_Layer: 6
   m_Name: Adventurer
   m_TagString: Adventurer
@@ -7036,6 +7037,20 @@ NavMeshAgent:
   m_BaseOffset: 0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1065306078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065306075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d056b1ea3e0bc924fa38a2b7e8440c83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathFrustration: 10
+  frustrationTracker: {fileID: 1360962716}
 --- !u!4 &1065306079
 Transform:
   m_ObjectHideFlags: 0
@@ -7141,6 +7156,24 @@ MonoBehaviour:
   animator: {fileID: 202778635}
   takeDamageTrigger: TakeDamage
   respawnOnDeath: 1
+  damaged:
+    m_PersistentCalls:
+      m_Calls: []
+  killed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1065306078}
+        m_TargetAssemblyTypeName: AdventurerFrustrationOnDeath, Assembly-CSharp
+        m_MethodName: onKilled
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1110977063
 GameObject:
   m_ObjectHideFlags: 0
