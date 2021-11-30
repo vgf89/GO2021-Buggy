@@ -13,6 +13,7 @@ public class BugAbilityButtonController : MonoBehaviour
     {
         playerBugController = GetComponent<PlayerBugController>();
         SetButtonCDTimers();
+        
     }
 
     // Update is called once per frame

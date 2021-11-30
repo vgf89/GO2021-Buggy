@@ -61,7 +61,7 @@ public class MapManager : MonoBehaviour
     {
         
         CheckPickedUpKeys();
-        CheckChestOpen();
+        GetChestOpenCount();
         CheckConditionOfTheWorld();
         if (displayTileDataToConsole)
             MouseHandling();
@@ -100,7 +100,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    void CheckChestOpen()
+    void GetChestOpenCount()
     {
         int count = 0;
         foreach (GameObject go in allChestsList)
@@ -137,8 +137,22 @@ public class MapManager : MonoBehaviour
     }
 
     //TO DO: Create failsafe once All tiles have been explored
-    public List<Vector3> GetNotOpenedChestPosition ()
+    public List<Vector3> GetAllNonDiscoveredObjectives (ref List<Vector3> _keyLocations)
     {
-        return null;
+        List<Vector3> chestLocations = new List<Vector3>();
+
+        foreach (GameObject chest in allChestsList)
+        {
+            if (!chest.GetComponent<ChestController>().isOpen)
+                chestLocations.Add(Vector3Int.FloorToInt(chest.transform.position));
+        }
+
+        foreach(GameObject key in allKeysList)
+        {
+            if (!key.GetComponent<KeyController>().isDiscovered)
+                _keyLocations.Add(Vector3Int.FloorToInt(key.transform.position));
+        }
+        return chestLocations;
     }
+
 }
