@@ -87,6 +87,7 @@ public class AdventurerAIBehavior : MonoBehaviour
                     if (gameTiles.AllTilesExplored())
                     {
                         tileDataQueue.Clear();
+                        adventurerController.discoveredChestPositionList = Object.FindObjectOfType<MapManager>().GetAllNonDiscoveredObjectives(ref adventurerController.discoveredKeyPositionList);
                         behavior = behaviors.AllTilesExplored;
                         break;
                     }

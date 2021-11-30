@@ -188,7 +188,7 @@ public class PlayerBugController : MonoBehaviour
                 SendToPast();
             if (Input.GetKeyDown(KeyCode.Alpha2))
                 ManipulateTime();
-            if (Input.GetKeyDown(KeyCode.Alpha3))
+            if (Input.GetKeyDown(KeyCode.Alpha3) && affectSpawnerTimer >= affectSpawnerCDTime)
                 isChoosingSpawner = true;
                 
             if (isChoosingSpawner)
@@ -196,6 +196,8 @@ public class PlayerBugController : MonoBehaviour
                 GetComponent<BugAbilityButtonController>().ability3.SetButtonText("Select a Spawner");
                 AffectSpawner();
             }
+            else
+                GetComponent<BugAbilityButtonController>().ability3.SetButtonText("Spawn More Enemies");
         }
     }
     #region GlitchPowers
@@ -240,7 +242,9 @@ public class PlayerBugController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-                if (hit.collider != null)//If spawner was clicked
+                if (hit.collider != null)
+                {
+                    //If spawner was clicked
                     if (hit.transform.name.Contains("Spawner"))
                     {
                         int randomSpawnCount = Random.Range(2, affectedSpawnCountRandomMax + 1);
@@ -248,9 +252,14 @@ public class PlayerBugController : MonoBehaviour
                         affectSpawnerTimer = 0;
                         return true;
                     }
-                GetComponent<BugAbilityButtonController>().ability3.SetButtonText("Spawn More Enemies");
+                }
+                
                 isChoosingSpawner = false;
             }
+        }
+        else
+        {
+            isChoosingSpawner = false;
         }
         return false;
     }
