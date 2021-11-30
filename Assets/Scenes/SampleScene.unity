@@ -7117,7 +7117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 5
   health: 0
-  soundEffect: 
+  soundEffect: playerhurt
 --- !u!1 &1110977063
 GameObject:
   m_ObjectHideFlags: 0
