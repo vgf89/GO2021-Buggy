@@ -7,14 +7,15 @@ using UnityEngine.SceneManagement;
 public class MainMenuController : MonoBehaviour
 {
     [SerializeField]
-    public List<Button> buttons;
+    public List<Canvas> canvasList;
 
     public string nextSceneName;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        canvasList[0].enabled = true;
+        canvasList[1].enabled = false;
     }
 
     // Update is called once per frame
@@ -40,5 +41,25 @@ public class MainMenuController : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void SwitchCanvas()
+    {
+        /*
+        if (canvasList[0].enabled)
+        {
+            canvasList[0].enabled = false;
+            canvasList[1].enabled = true;
+        }
+        else
+        {
+            canvasList[0].enabled = false;
+            canvasList[1].enabled = true;
+        }*/
+
+        for (int i = 0; i < canvasList.Count; i++)
+        {
+            canvasList[i].enabled = !canvasList[i].enabled;
+        }
     }
 }

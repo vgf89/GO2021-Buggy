@@ -27,9 +27,12 @@ public class GameWorldSpeedController : MonoBehaviour
     void Update()
     {
         worldAnimations = Object.FindObjectsOfType<Animator>();
+        ChangeWorldAnimations();
 
         if (worldSpeedIsChanged)
+        {
             abilityDurationTimer += Time.deltaTime;
+        }
 
         if (abilityDurationTimer > FindObjectOfType<PlayerBugController>().manipulateTimeDuration)
             ResetWorldSpeed();
