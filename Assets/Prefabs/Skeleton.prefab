@@ -282,7 +282,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_Sprite: {fileID: 7729768860333772239, guid: 392c0222dc48783409f9fc8d75d918be, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -497,6 +497,15 @@ MonoBehaviour:
   startingHealth: 5
   health: 0
   soundEffect: skeletonhurt
+  animator: {fileID: 0}
+  takeDamageTrigger: 
+  respawnOnDeath: 0
+  damaged:
+    m_PersistentCalls:
+      m_Calls: []
+  killed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3219663882895695785
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,7 +557,6 @@ MonoBehaviour:
   loopSound: 0
   adventurerDetector: {fileID: 3219663883324180464}
   projectile: {fileID: 1238154565918878748, guid: a92fc33ac81a5c4489578686d2108aba, type: 3}
-  projectiles_parent: {fileID: 0}
   projectile_spawn_position: {fileID: 74613829117757636}
   projectileVelocity: 10
 --- !u!1 &3219663883324180470

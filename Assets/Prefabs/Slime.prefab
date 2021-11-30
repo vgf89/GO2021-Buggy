@@ -180,7 +180,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 40
   m_Sprite: {fileID: -7365091535247084893, guid: 392c0222dc48783409f9fc8d75d918be, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -336,6 +336,15 @@ MonoBehaviour:
   startingHealth: 10
   health: 0
   soundEffect: slimehurt
+  animator: {fileID: 0}
+  takeDamageTrigger: 
+  respawnOnDeath: 0
+  damaged:
+    m_PersistentCalls:
+      m_Calls: []
+  killed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4715658452447079488
 GameObject:
   m_ObjectHideFlags: 0

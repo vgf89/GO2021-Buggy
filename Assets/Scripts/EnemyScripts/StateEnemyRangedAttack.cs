@@ -8,7 +8,7 @@ public class StateEnemyRangedAttack : State
     new private Rigidbody2D rigidbody2D;
 
     [SerializeField] private GameObject projectile; // Projectile to instantiate on state enter
-    [SerializeField] private Transform projectiles_parent; // Typically an unmoving gameobject containing all projectiles or generic entities
+    private GameObject entityContainer;
     [SerializeField] private Transform projectile_spawn_position; // A Transform for where to spawn the projectile
     [SerializeField] private float projectileVelocity = 1;
 
@@ -16,7 +16,7 @@ public class StateEnemyRangedAttack : State
         base.Awake();
 
         rigidbody2D = adventurerDetector.GetComponent<Collider2D>().attachedRigidbody;
-        
+        entityContainer = GameObject.FindGameObjectWithTag("EntityContainer");
     }
     
     override public void enter()
@@ -26,13 +26,13 @@ public class StateEnemyRangedAttack : State
 
         // Check existence of adventurer and projectile prefab
         GameObject player = adventurerDetector.getOther();
-        if (player == null || projectile == null || projectiles_parent == null || projectile_spawn_position == null) {
+        if (player == null || projectile == null || entityContainer == null || projectile_spawn_position == null) {
             return;
         }
         // Figure out direction and velocity
         Vector2 vel2 = (player.transform.position - projectile_spawn_position.position);
         vel2 = vel2.normalized * projectileVelocity;
-        GameObject newProjectile = Instantiate(projectile, projectiles_parent);
+        GameObject newProjectile = Instantiate(projectile, entityContainer.transform);
         newProjectile.transform.position = projectile_spawn_position.transform.position;
         Projectile newProjectileComponent = newProjectile.GetComponent<Projectile>();
         if (newProjectileComponent == null) {

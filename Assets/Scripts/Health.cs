@@ -10,14 +10,14 @@ public class Health : MonoBehaviour
     [SerializeField] private string soundEffect;
     [SerializeField] private Animator animator;
     [SerializeField] private string takeDamageTrigger;
-    [SerializeField] private bool respawnOnDeath = false;
-    private Vector3 startingPosition;
+    [SerializeField] private bool dontDestroyOnDeath = false;
+    //[ReadOnly][SerializeField]private Vector3 startingPosition;
     public UnityEvent damaged;
     public UnityEvent killed;
 
-    void Start() {
+    void Awake() {
         health = startingHealth;
-        startingPosition = GetComponentInParent<Rigidbody2D>().transform.position;
+        //startingPosition = transform.position;
     }    
 
     public void takeDamage(int damage) {
@@ -27,9 +27,9 @@ public class Health : MonoBehaviour
             // TODO: Die/respawn, increase frustration stat
             Debug.Log(name + " has 0 HP");
             killed.Invoke();
-            if (respawnOnDeath) {
+            if (dontDestroyOnDeath) {
                 // TODO: Play a death animation before doing this
-                GetComponentInParent<Rigidbody2D>().transform.position = startingPosition;
+                //transform.position = startingPosition;
                 health = startingHealth;
             }
             else {
