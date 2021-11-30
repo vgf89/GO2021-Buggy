@@ -346,7 +346,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4715658452447079491}
   - component: {fileID: 4715658452447079490}
-  m_Layer: 0
+  - component: {fileID: 4437336382195413682}
+  m_Layer: 8
   m_Name: Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -386,6 +387,23 @@ MonoBehaviour:
   soundEffect: slimeattack
   loopSound: 0
   adventurerDetector: {fileID: 4715658452607398937}
+  damage: 1
+--- !u!58 &4437336382195413682
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4715658452447079488}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.6
 --- !u!1 &4715658452607398943
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,7 +625,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.6
 --- !u!114 &4715658452874862872
 MonoBehaviour:
   m_ObjectHideFlags: 0
