@@ -450,6 +450,9 @@ public class AdventurerAIBehavior : MonoBehaviour
 
         if (currentBehavior == behaviors.Exploring)
         {
+            //While exploring, if the AI finds a key, seek the key
+            if (currentDiscoveredKeyCount > 0)
+                return behaviors.SeekKey;
             if (!navAgent.hasPath)
                 return behaviors.Thinking;
         }

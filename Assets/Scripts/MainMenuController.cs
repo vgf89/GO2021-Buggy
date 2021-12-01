@@ -14,8 +14,7 @@ public class MainMenuController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        canvasList[0].enabled = true;
-        canvasList[1].enabled = false;
+        SwitchCanvas("Main Title");
     }
 
     // Update is called once per frame
@@ -43,7 +42,8 @@ public class MainMenuController : MonoBehaviour
         Application.Quit();
     }
 
-    public void SwitchCanvas()
+    //Canvas does not need to be included in the canvasName.
+    public void SwitchCanvas(string canvasName)
     {
         /*
         if (canvasList[0].enabled)
@@ -59,7 +59,12 @@ public class MainMenuController : MonoBehaviour
 
         for (int i = 0; i < canvasList.Count; i++)
         {
-            canvasList[i].enabled = !canvasList[i].enabled;
+            if (canvasList[i].name.Contains(canvasName))
+                canvasList[i].enabled = true;
+            else
+                canvasList[i].enabled = false;
         }
+
+
     }
 }
