@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Spawner : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class Spawner : MonoBehaviour
         if (Time.time >= lastSpawnTime + spawnDelay && proximity < maximumAdventurerDistance) {
             GameObject newObject = Instantiate(spawn, transform.position, transform.rotation);
             newObject.transform.SetParent(entitiesParent.transform);
+            newObject.transform.position = transform.position;
+            NavMeshAgent navMeshAgent = newObject.GetComponent<NavMeshAgent>();
+            if (navMeshAgent) {
+                navMeshAgent.Warp(transform.position);
+            }
             lastSpawnTime = Time.time;
             spawnCount++;
         }
@@ -34,6 +40,10 @@ public class Spawner : MonoBehaviour
         {
             GameObject newObject = Instantiate(spawn, entitiesParent.transform);
             newObject.transform.position = transform.position;
+            NavMeshAgent navMeshAgent = newObject.GetComponent<NavMeshAgent>();
+            if (navMeshAgent) {
+                navMeshAgent.Warp(transform.position);
+            }
         }
     }
 }
