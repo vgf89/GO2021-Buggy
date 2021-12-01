@@ -49,9 +49,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawn: {fileID: 4715658452119533745, guid: 47475043046317740b6f2433664c3a01, type: 3}
   entitiesParent: {fileID: 0}
-  maxSpawns: 10
+  maxSpawns: 7
   spawnCount: 0
-  spawnDelay: 3
+  spawnDelay: 4
   lastSpawnTime: 0
   maximumAdventurerDistance: 11
 --- !u!212 &6469129463879302506
@@ -122,7 +122,7 @@ MonoBehaviour:
   soundEffect: 
   animator: {fileID: 0}
   takeDamageTrigger: 
-  respawnOnDeath: 0
+  dontDestroyOnDeath: 0
   damaged:
     m_PersistentCalls:
       m_Calls: []
