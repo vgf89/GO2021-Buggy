@@ -110,14 +110,14 @@ public class AdventurerController : MonoBehaviour
                     if (gameTiles.tiles.TryGetValue(currentGridPos + new Vector3Int(x, y, 0), out gTileData))
                         if (!gTileData.isExplored)
                         {
-                            gTileData.isExplored = true;
+                            gTileData.SetTileToExplored();
 
                             // Color the tile to show it's been explored
                             gameTiles.ColorExploredTile(gTileData);
 
                             if (isDebugging)
                                 Debug.Log(transform.name + " has explored the ground tile at " + gTileData.worldPosition.ToString());
-                            gameTiles.GetTileValueOfNeighbors(gTileData.worldPosition);
+                            //gameTiles.GetTileValueOfNeighbors(gTileData.worldPosition);
                         }
                 }
             }

@@ -11485,8 +11485,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d18b5a37594d88746a4062d66b96db8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundTileNeighborValue: 1
-  wallTileNeighborValue: 1.4
   groundTileMap: {fileID: 1487940465}
   wallTileMap: {fileID: 355823981}
   isDebugging: 0
@@ -38116,7 +38114,7 @@ MonoBehaviour:
   allKeysList: []
   openChestCount: 0
   condition: 3
-  displayTileDataToConsole: 0
+  displayTileDataToConsole: 1
 --- !u!4 &1549669155
 Transform:
   m_ObjectHideFlags: 0

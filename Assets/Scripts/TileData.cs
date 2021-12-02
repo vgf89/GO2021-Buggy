@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -32,6 +31,9 @@ public class TileData : ScriptableObject
     public const string GROUNDTILENAMESTRING = "Ground Tile";
     public const string WALLTILENAMESTRING = "Wall Tile";
 
+    public const float GroundTileNeighborValue = 1f;
+    public const float WallTileNeighborValue = 1.4f;
+
 
     public string printData()
     {
@@ -47,12 +49,52 @@ public class TileData : ScriptableObject
         return print;
     }
 
-    public void CheckisExplored()
+    public bool CheckisExplored()
     {
         if (isExplored || tileName.Equals(WALLTILENAMESTRING))
         {
             tileValue = 0;
             efficiencyScore = 0f;
+        }
+        return isExplored;
+    }
+
+    //Tile Value is based on its neighbors
+    public void GetTileValue()
+    {
+        if (tileName.Equals(WALLTILENAMESTRING))
+        {
+            tileValue = 0;
+            return;
+        }
+        else
+        {
+            float temp = 0f;
+            foreach (KeyValuePair<Vector3, TileData> neighborTileData in tileNeighbors)
+            {
+                
+                if (!isExplored)
+                {
+                    if (neighborTileData.Value.tileName.Equals(GROUNDTILENAMESTRING))
+                        temp += GroundTileNeighborValue;
+                    else if (neighborTileData.Value.tileName.Equals(WALLTILENAMESTRING))
+                        temp += WallTileNeighborValue;
+                }
+                
+            }
+            tileValue = temp;
+        }
+    }
+
+    public void SetTileToExplored()
+    {
+        isExplored = true;
+
+        //If this ground tile is explored, reduce the neighbor's tileValue.
+        foreach (KeyValuePair<Vector3, TileData> tileData in tileNeighbors)
+        {
+            if (!isExplored && tileName.Equals(GROUNDTILENAMESTRING))
+                tileData.Value.tileValue -= GroundTileNeighborValue;
         }
     }
 }

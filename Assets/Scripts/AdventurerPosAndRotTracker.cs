@@ -48,7 +48,7 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
     [Tooltip("Place the Tilemap for Ground here.")]
     [SerializeField]
     private Tilemap groundTilemap;
-    Queue<PosAndRot> savePosAndRotQueue;
+    static Queue<PosAndRot> savePosAndRotQueue;
     bool isTracking;
     
 
@@ -136,5 +136,10 @@ public class AdventurerPosAndRotTracker : MonoBehaviour
         PosAndRot temp = savePosAndRotQueue.Dequeue();
         savePosAndRotQueue.Clear();
         return temp;
+    }
+
+    public static void ClearPosAndRotQueue()
+    {
+        savePosAndRotQueue.Clear();
     }
 }

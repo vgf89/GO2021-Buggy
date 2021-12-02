@@ -16,5 +16,6 @@ public class DeathWarp : MonoBehaviour
     {
         navMeshAgent.Warp(startingPosition);
         Object.FindObjectOfType<AdventurerAIBehavior>().RestartThinking();
+        AdventurerPosAndRotTracker.ClearPosAndRotQueue();
     }
 }

@@ -148,7 +148,7 @@ public class AdventurerAIBehavior : MonoBehaviour
         var tempTileData = FindCurrentTile();
         tempTileData.isVisited = true;
         gameTiles.CheckAllTilesIsExplored();
-        gameTiles.GetAllTileValues();
+        //gameTiles.GetAllTileValues();
         tileDataQueue.Enqueue(tempTileData);
     }
 
@@ -161,7 +161,7 @@ public class AdventurerAIBehavior : MonoBehaviour
         var tempTileData = FindCurrentTile();
         tempTileData.isVisited = true;
         gameTiles.CheckAllTilesIsExplored();
-        gameTiles.GetAllTileValues();
+        //gameTiles.GetAllTileValues();
         tileDataQueue.Enqueue(tempTileData);
     }
 

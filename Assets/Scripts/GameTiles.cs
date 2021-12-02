@@ -8,12 +8,14 @@ public class GameTiles : MonoBehaviour
     public const string GROUNDTILENAMESTRING = "Ground Tile";
     public const string WALLTILENAMESTRING = "Wall Tile";
 
+    /*
     [Header("Exploration Algorithm Values")]
     [MinAttribute(0)]
     [Tooltip("The value to add to tileValue if the neighboring tile is a Ground Tile")]
     public float groundTileNeighborValue;
     [Tooltip("The value to add to tileValue if the neighboring tile is a Wall Tile")]
     public float wallTileNeighborValue;
+    */
 
     //Function currently unknown
     public static GameTiles instance;
@@ -52,6 +54,7 @@ public class GameTiles : MonoBehaviour
 
         //GetGridTilesInArray();
         tiles = new Dictionary<Vector3, TileData>();
+
 
         GetGridTilesInDictionary(groundTileMap, GROUNDTILENAMESTRING);
         SetAllUnexploredTileColors(groundTileMap);
@@ -159,22 +162,8 @@ public class GameTiles : MonoBehaviour
 
         foreach (KeyValuePair<Vector3, TileData> _tileData in tiles)
         {
-            float tempCounter = 0;
-            foreach (KeyValuePair<Vector3, TileData> neighborTile in _tileData.Value.tileNeighbors)
-            {
-                //if the neighboring tiles have not been explored
-                if (!neighborTile.Value.isExplored)
-                {
-                    if (neighborTile.Value.tileName.Equals(WALLTILENAMESTRING))
-                        tempCounter += wallTileNeighborValue;
-                    else if (neighborTile.Value.tileName.Equals(GROUNDTILENAMESTRING))
-                        tempCounter += groundTileNeighborValue;
-                }
-            }
-            if (_tileData.Value.tileName.Equals(GROUNDTILENAMESTRING))
-                _tileData.Value.tileValue = tempCounter;
-            else if (_tileData.Value.tileName.Equals(WALLTILENAMESTRING))
-                _tileData.Value.tileValue = 0;
+            _tileData.Value.GetTileValue();
+            
             if (isDebugging)
                 Debug.Log(_tileData.Value.printData());
         }
@@ -189,17 +178,20 @@ public class GameTiles : MonoBehaviour
         {
             //Go through all the neigboring tiles of this neighbor to determine the tileValue if it is a groundTile
             if (neighborTile.Value.tileName.Equals(GROUNDTILENAMESTRING))
-            { 
+            {
+                neighborTile.Value.GetTileValue();
+                /*
                 float tempCounter = 0;
                 foreach (KeyValuePair<Vector3, TileData> tile in neighborTile.Value.tileNeighbors)
                 {
                     //if the neighboring ground tiles have not been explored
                     if ((!tile.Value.isExplored) && tile.Value.tileName.Equals(GROUNDTILENAMESTRING))
-                        tempCounter += groundTileNeighborValue;
+                        tempCounter += TileData.GroundTileNeighborValue;
                     else if (tile.Value.tileName.Equals(WALLTILENAMESTRING)) //If the neighborTile is a Wall
-                        tempCounter += wallTileNeighborValue;
+                        tempCounter += TileData.WallTileNeighborValue;
                 }
                 neighborTile.Value.tileValue = tempCounter;
+                */
             }
                 
             if (isDebugging)
