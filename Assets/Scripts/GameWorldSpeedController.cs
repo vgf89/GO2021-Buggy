@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameWorldSpeedController : MonoBehaviour
@@ -13,12 +15,14 @@ public class GameWorldSpeedController : MonoBehaviour
 
     private float abilityDurationTimer;
 
-    [SerializeField] Animator[] worldAnimations;
+    [SerializeField] List<Animator> worldAnimators;
+
+    PlayerBugController playerBugController;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        worldAnimations = Object.FindObjectsOfType<Animator>();
+        playerBugController = FindObjectOfType<PlayerBugController>();
         worldSpeedIsChanged = false;
         worldSpeedMultiplier = originalWorldSpeed;
     }
@@ -26,7 +30,7 @@ public class GameWorldSpeedController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        worldAnimations = Object.FindObjectsOfType<Animator>();
+        //worldAnimations = Object.FindObjectsOfType<Animator>();
         ChangeWorldAnimations();
 
         if (worldSpeedIsChanged)
@@ -34,7 +38,7 @@ public class GameWorldSpeedController : MonoBehaviour
             abilityDurationTimer += Time.deltaTime;
         }
 
-        if (abilityDurationTimer > FindObjectOfType<PlayerBugController>().manipulateTimeDuration)
+        if (abilityDurationTimer > playerBugController.manipulateTimeDuration)
             ResetWorldSpeed();
 
     }
@@ -55,7 +59,7 @@ public class GameWorldSpeedController : MonoBehaviour
 
     void ChangeWorldAnimations()
     {
-        foreach (Animator a in worldAnimations)
+        foreach (Animator a in worldAnimators)
         {
             a.speed = 1 * worldSpeedMultiplier;
         }
@@ -67,4 +71,14 @@ public class GameWorldSpeedController : MonoBehaviour
         worldSpeedIsChanged = false;
         abilityDurationTimer = 0;
     }
+
+    public void AddAnimatorToWorldAnimatorList (Animator animator)
+    {
+        worldAnimators.Add(animator);
+    }
+    public void RemoveAnimatorToWorldAnimatorList(Animator animator)
+    {
+        worldAnimators.Remove(animator);
+    }
 }
+

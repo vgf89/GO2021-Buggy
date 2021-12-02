@@ -742,6 +742,7 @@ GameObject:
   - component: {fileID: 202778636}
   - component: {fileID: 202778635}
   - component: {fileID: 202778637}
+  - component: {fileID: 202778638}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -846,6 +847,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navMeshAgent: {fileID: 1065306077}
+--- !u!114 &202778638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202778633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a1c0036e42a25418a579e67c0da156, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
 --- !u!1001 &209816136
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12904,7 +12918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originalWorldSpeed: 1
   manipulatedWorldSpeed: 0.33
-  worldAnimations: []
+  worldAnimators: []
 --- !u!114 &1360962718
 MonoBehaviour:
   m_ObjectHideFlags: 0
